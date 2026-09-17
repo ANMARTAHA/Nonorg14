@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Smart — Group 14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A1B20;
+    --panel:#0F262C;
+    --panel-2:#153138;
+    --line:#254349;
+    --paper:#EDE6D5;
+    --paper-2:#E4DCC7;
+    --amber:#E3A857;
+    --cyan:#5FD3C4;
+    --rose:#E15B5B;
+    --text:#EAF2F1;
+    --text-dim:#9FB9BB;
+    --radius-sm:4px;
+    --radius-md:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:'IBM Plex Sans',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    margin:0;
+    color:var(--text);
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--cyan);}
+
+  /* ---------- HERO / NAV ---------- */
+  header.top{
+    padding:38px 6vw 18px;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(ellipse at top left, rgba(95,211,196,0.10), transparent 55%),
+      var(--ink);
+  }
+  .eyebrow-row{
+    display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    margin-bottom:6px;
+  }
+  .brand{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;letter-spacing:.04em;color:var(--text-dim);
+  }
+  h1.title{
+    font-size:clamp(34px,5.5vw,58px);
+    line-height:1.02;
+    margin:4px 0 6px;
+  }
+  h1.title em{
+    font-style:normal;
+    color:var(--amber);
+  }
+  p.subtitle{
+    color:var(--text-dim);
+    font-size:16px;
+    max-width:640px;
+    margin-bottom:26px;
+  }
+
+  nav.tiles{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+  }
+  .tile-btn{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:14px 10px 10px;
+    cursor:pointer;
+    text-align:left;
+    color:var(--text);
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+    font-family:'IBM Plex Sans',sans-serif;
+  }
+  .tile-btn:hover{border-color:var(--cyan);}
+  .tile-btn.active{
+    background:var(--panel-2);
+    border-color:var(--amber);
+  }
+  .tile-btn .idx{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    position:absolute;
+    top:8px;right:10px;
+  }
+  .tile-btn .sym{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:700;
+    display:block;
+    margin-bottom:2px;
+  }
+  .tile-btn.active .sym{color:var(--amber);}
+  .tile-btn .lbl{
+    font-size:12px;
+    color:var(--text-dim);
+    display:block;
+  }
+
+  /* ---------- MAIN LAYOUT ---------- */
+  main{padding:34px 6vw 80px;}
+  section.pane{display:none;}
+  section.pane.active{display:block; animation:rise .35s ease;}
+  @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .pane-head{
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px;
+    margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--line);
+  }
+  .pane-head h2{font-size:clamp(24px,3vw,32px);}
+  .pane-head .note{color:var(--text-dim);font-size:13px;max-width:420px;}
+
+  /* ---------- OVERVIEW ---------- */
+  .ov-group{margin-bottom:34px;}
+  .ov-group h3{
+    font-size:14px;text-transform:none;color:var(--cyan);
+    font-family:'IBM Plex Mono',monospace;font-weight:500;
+    margin-bottom:14px;
+    border-left:3px solid var(--cyan);padding-left:10px;
+  }
+  .ov-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;
+  }
+  .law-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:14px 16px;
+  }
+  .law-card .k{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;color:var(--amber);display:block;margin-bottom:6px;
+  }
+  .law-card p{margin:0;font-size:14.5px;color:var(--text);}
+
+  /* ---------- DIAGRAMS ---------- */
+  .diagram-block{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:22px 24px;
+    margin-bottom:24px;
+  }
+  .diagram-block h3{font-size:19px;margin-bottom:4px;}
+  .diagram-block .desc{color:var(--text-dim);font-size:13.5px;margin-bottom:16px;}
+
+  .pt-grid{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .pt-cell{
+    width:78px;height:78px;
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    background:var(--panel-2);
+    cursor:pointer;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    transition:border-color .15s, transform .1s;
+  }
+  .pt-cell:hover{transform:translateY(-2px);}
+  .pt-cell.sel{border-color:var(--amber);background:#1d3f38;}
+  .pt-cell .num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);align-self:flex-start;margin:4px 0 0 6px;}
+  .pt-cell .el{font-family:'Fraunces',serif;font-size:24px;font-weight:700;}
+  .pt-detail{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:14px 16px;min-height:78px;font-size:14px;
+  }
+  .pt-detail b{color:var(--amber);}
+
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .chip{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    padding:7px 14px;border-radius:100px;font-size:13px;cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;
+  }
+  .chip.sel{border-color:var(--cyan);color:var(--cyan);}
+
+  .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .bar-row .lab{width:64px;font-family:'IBM Plex Mono',monospace;font-size:13px;flex-shrink:0;}
+  .bar-track{flex:1;background:var(--panel-2);border-radius:100px;height:20px;overflow:hidden;border:1px solid var(--line);}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--amber));width:0%;transition:width .5s ease;border-radius:100px;}
+  .bar-val{width:78px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-dim);flex-shrink:0;}
+
+  .ox-row{display:flex;gap:8px;}
+  .ox-col{flex:1;text-align:center;}
+  .ox-col .el{font-family:'Fraunces',serif;font-weight:700;font-size:20px;cursor:pointer;margin-bottom:6px;padding:4px;border-radius:4px;}
+  .ox-col .el.sel{background:var(--panel-2);color:var(--amber);}
+  .stack{display:flex;flex-direction:column-reverse;height:120px;border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .seg4{background:#3a6a63;}
+  .seg2{background:var(--amber);}
+  .ox-note{margin-top:14px;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 16px;font-size:13.5px;min-height:20px;}
+
+  .rx-controls{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+  .rx-scheme{
+    font-family:'IBM Plex Mono',monospace;font-size:16px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:20px;text-align:center;letter-spacing:.02em;
+  }
+  .rx-scheme .arrow{color:var(--cyan);margin:0 10px;}
+  .rx-scheme .hi{color:var(--amber);}
+
+  .toggle2{display:flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;width:fit-content;margin-bottom:16px;}
+  .toggle2 button{
+    background:var(--panel-2);color:var(--text-dim);border:none;padding:8px 16px;cursor:pointer;font-size:13px;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .toggle2 button.sel{background:var(--amber);color:#1a1204;font-weight:600;}
+  .sila-body{display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
+  .sila-svg{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px;}
+  .sila-text{flex:1;min-width:220px;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;font-size:14px;}
+
+  table.hy-table{width:100%;border-collapse:collapse;margin-top:4px;}
+  table.hy-table th{
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim);
+    border-bottom:1px solid var(--line);padding:8px 10px;font-weight:500;
+  }
+  table.hy-table td{padding:10px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top;}
+  table.hy-table tr.hy-row{cursor:pointer;}
+  table.hy-table tr.hy-row:hover td{background:rgba(95,211,196,0.05);}
+  .hy-detail td{background:var(--panel-2);font-size:13.5px;color:var(--text-dim);display:none;}
+  .hy-detail.open td{display:table-cell;}
+
+  /* ---------- MINI MAP ---------- */
+  .map-layout{display:grid;grid-template-columns:290px 1fr;gap:20px;}
+  .map-list{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);
+    padding:8px;max-height:560px;overflow-y:auto;
+  }
+  .map-item{
+    width:100%;text-align:left;background:transparent;border:none;color:var(--text);
+    padding:11px 12px;border-radius:6px;cursor:pointer;font-size:14px;font-family:'IBM Plex Sans',sans-serif;
+    display:block;border-left:3px solid transparent;
+  }
+  .map-item:hover{background:var(--panel-2);}
+  .map-item.sel{background:var(--panel-2);border-left:3px solid var(--amber);color:var(--amber);}
+  .map-display{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);
+    padding:30px 34px;min-height:560px;
+  }
+  .map-display .ph{color:var(--text-dim);font-size:15px;display:flex;align-items:center;justify-content:center;height:100%;min-height:500px;text-align:center;}
+  .map-display h3{font-size:24px;margin-bottom:14px;color:var(--amber);}
+  .map-display .body-text{font-size:15.5px;}
+  .map-display .body-text ul{padding-left:20px;margin:0;}
+  .map-display .body-text li{margin-bottom:8px;}
+
+  @media(max-width:820px){
+    .map-layout{grid-template-columns:1fr;}
+    nav.tiles{grid-template-columns:repeat(3,1fr);}
+  }
+
+  /* ---------- FLASHCARDS ---------- */
+  .fc-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+  .fc-count{font-family:'IBM Plex Mono',monospace;color:var(--text-dim);font-size:13px;}
+  .btn-primary{
+    background:var(--amber);color:#1a1204;border:none;padding:9px 18px;border-radius:100px;
+    font-size:13.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-ghost{
+    background:transparent;color:var(--text-dim);border:1px solid var(--line);padding:8px 16px;border-radius:100px;
+    font-size:13px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+
+  .fc-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;
+  }
+  .fc-card{
+    perspective:1200px;height:170px;cursor:pointer;
+  }
+  .fc-inner{
+    position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;
+  }
+  .fc-card.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute;inset:0;backface-visibility:hidden;
+    border-radius:var(--radius-sm);padding:16px;
+    display:flex;flex-direction:column;justify-content:center;
+    font-size:14px;
+  }
+  .fc-front{background:var(--paper);color:#1d2a24;border:1px solid var(--paper-2);}
+  .fc-front .tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7a6a3f;margin-bottom:8px;letter-spacing:.03em;}
+  .fc-back{background:var(--panel-2);color:var(--text);border:1px solid var(--cyan);transform:rotateY(180deg);}
+  .fc-back .tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--cyan);margin-bottom:8px;}
+
+  /* ---------- QUIZ ---------- */
+  .quiz-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+  .quiz-score{
+    font-family:'IBM Plex Mono',monospace;font-size:14px;background:var(--panel-2);
+    border:1px solid var(--line);border-radius:100px;padding:8px 18px;
+  }
+  .quiz-score.good{color:var(--cyan);border-color:var(--cyan);}
+  .q-item{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);
+    padding:18px 20px;margin-bottom:12px;
+  }
+  .q-item .q-num{font-family:'IBM Plex Mono',monospace;color:var(--text-dim);font-size:12px;}
+  .q-item .q-text{font-size:15.5px;margin:6px 0 12px;}
+  .q-opts{display:grid;gap:8px;}
+  .q-opt{
+    display:flex;align-items:center;gap:10px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+    padding:9px 12px;cursor:pointer;font-size:14px;
+  }
+  .q-opt:hover{border-color:var(--cyan);}
+  .q-opt input{accent-color:var(--amber);}
+  .q-opt.correct{border-color:var(--cyan);background:rgba(95,211,196,0.12);}
+  .q-opt.wrong{border-color:var(--rose);background:rgba(225,91,91,0.12);}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:22px 6vw;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+    color:var(--text-dim);font-size:12.5px;font-family:'IBM Plex Mono',monospace;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="eyebrow-row">
+    <span class="brand">PHARM · 3RD STAGE · INORGANIC CHEMISTRY</span>
+  </div>
+  <h1 class="title">Study Smart <em>— Group 14</em></h1>
+  <p class="subtitle">Everything on the carbon family — C, Si, Ge, Sn, Pb — condensed into five focused tools: the essentials, the visuals, a click-through map, recall cards, and a self-test bank.</p>
+
+  <nav class="tiles" id="navTiles"></nav>
+</header>
+
+<main>
+
+  <!-- 1. OVERVIEW -->
+  <section class="pane" id="pane-overview">
+    <div class="pane-head">
+      <h2>Overview</h2>
+      <div class="note">The core rules and facts only — no lecture, just what you need to hold onto.</div>
+    </div>
+    <div id="overviewContent"></div>
+  </section>
+
+  <!-- 2. DIAGRAMS -->
+  <section class="pane" id="pane-diagrams">
+    <div class="pane-head">
+      <h2>Diagrams &amp; Data</h2>
+      <div class="note">Every chart, table, and structure from the material — click into each one.</div>
+    </div>
+
+    <!-- Periodic table explorer -->
+    <div class="diagram-block">
+      <h3>Group 14 explorer</h3>
+      <div class="desc">Click an element to see its atomic number and electron configuration.</div>
+      <div class="pt-grid" id="ptGrid"></div>
+      <div class="pt-detail" id="ptDetail">Select an element above.</div>
+    </div>
+
+    <!-- Property comparison -->
+    <div class="diagram-block">
+      <h3>Carbon vs. Silicon — property comparison</h3>
+      <div class="desc">Switch the metric to compare the two reaction centers used in drug design.</div>
+      <div class="btn-row" id="propChips"></div>
+      <div id="propBars"></div>
+      <div class="ox-note" id="propNote"></div>
+    </div>
+
+    <!-- Oxidation state stability -->
+    <div class="diagram-block">
+      <h3>Oxidation state stability down the group</h3>
+      <div class="desc">Click an element to compare how favoured the +4 and +2 states are.</div>
+      <div class="ox-row" id="oxRow"></div>
+      <div class="ox-note" id="oxNote">Click an element above to read its oxidation-state behaviour.</div>
+    </div>
+
+    <!-- Silylation reaction builder -->
+    <div class="diagram-block">
+      <h3>Silylation reaction builder</h3>
+      <div class="desc">Silylation swaps the H on a heteroatom for a silyl group. Pick the heteroatom, then reveal the product.</div>
+      <div class="rx-controls" id="rxChips"></div>
+      <div class="rx-scheme" id="rxScheme"></div>
+    </div>
+
+    <!-- Carbon silylation toggle -->
+    <div class="diagram-block">
+      <h3>Carbon silylation vs. plain carbon center</h3>
+      <div class="desc">Toggle to see the reaction and what changes when a silicon group sits next to a carbon center.</div>
+      <div class="toggle2" id="csToggle">
+        <button class="sel" data-v="off">Carbon center</button>
+        <button data-v="on">Silylated center</button>
+      </div>
+      <div class="rx-scheme" id="csScheme"></div>
+    </div>
+
+    <!-- Silatrane toxicity explorer -->
+    <div class="diagram-block">
+      <h3>Silatrane toxicity explorer</h3>
+      <div class="desc">A silatrane's danger depends entirely on the R group riding on its penta-coordinated silicon center.</div>
+      <div class="toggle2" id="silaToggle">
+        <button class="sel" data-v="aryl">Aryl / 2-thienyl R group</button>
+        <button data-v="alkyl">Alkyl / alkenyl R group</button>
+      </div>
+      <div class="sila-body">
+        <div class="sila-svg">
+          <svg width="180" height="170" viewBox="0 0 180 170">
+            <circle cx="90" cy="90" r="16" fill="#5FD3C4" />
+            <text x="90" y="95" text-anchor="middle" font-size="13" font-family="IBM Plex Mono" fill="#0A1B20">Si</text>
+            <line x1="90" y1="74" x2="90" y2="30" stroke="#9FB9BB" stroke-width="2"/>
+            <text x="90" y="20" text-anchor="middle" font-size="12" fill="#9FB9BB" font-family="IBM Plex Mono">N</text>
+            <line x1="76" y1="80" x2="35" y2="55" stroke="#9FB9BB" stroke-width="2"/>
+            <text x="26" y="50" text-anchor="middle" font-size="12" fill="#9FB9BB" font-family="IBM Plex Mono">O</text>
+            <line x1="104" y1="80" x2="145" y2="55" stroke="#9FB9BB" stroke-width="2"/>
+            <text x="154" y="50" text-anchor="middle" font-size="12" fill="#9FB9BB" font-family="IBM Plex Mono">O</text>
+            <line x1="82" y1="103" x2="60" y2="125" stroke="#9FB9BB" stroke-width="2"/>
+            <text x="52" y="138" text-anchor="middle" font-size="12" fill="#9FB9BB" font-family="IBM Plex Mono">O</text>
+            <line x1="90" y1="106" x2="90" y2="150" stroke="#E3A857" stroke-width="2"/>
+            <text x="90" y="163" text-anchor="middle" font-size="12" fill="#E3A857" font-family="IBM Plex Mono">R</text>
+          </svg>
+        </div>
+        <div class="sila-text" id="silaText"></div>
+      </div>
+    </div>
+
+    <!-- Hydride table -->
+    <div class="diagram-block">
+      <h3>Hydride reactivity table</h3>
+      <div class="desc">Click a row to reveal how each Group 14 hydride behaves in air.</div>
+      <table class="hy-table" id="hyTable">
+        <thead><tr><th>Hydride family</th><th>Element</th><th>Formula</th></tr></thead>
+        <tbody id="hyBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. MINI MAP -->
+  <section class="pane" id="pane-map">
+    <div class="pane-head">
+      <h2>Mini Map</h2>
+      <div class="note">Click any topic on the left — the full note opens right here on the right.</div>
+    </div>
+    <div class="map-layout">
+      <div class="map-list" id="mapList"></div>
+      <div class="map-display" id="mapDisplay">
+        <div class="ph">Pick a topic from the list to read it.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FLASHCARDS -->
+  <section class="pane" id="pane-flash">
+    <div class="pane-head">
+      <h2>Flash Cards</h2>
+      <div class="note">Tap a card to flip it. Covers the full lecture, term by term.</div>
+    </div>
+    <div class="toggle2" id="fcLevelToggle">
+      <button class="sel" data-level="easy">Level 1 · Easy (60)</button>
+      <button data-level="medium">Level 2 · Medium (50)</button>
+      <button data-level="hard">Level 3 · Hard (40)</button>
+    </div>
+    <div class="fc-controls">
+      <span class="fc-count" id="fcCount"></span>
+      <button class="btn-ghost" id="fcReset">Flip all back</button>
+    </div>
+    <div class="fc-grid" id="fcGrid"></div>
+  </section>
+
+  <!-- 5. QUIZ -->
+  <section class="pane" id="pane-quiz">
+    <div class="pane-head">
+      <h2>Quiz Bank</h2>
+      <div class="note">Answers are shuffled every time you load or reshuffle the bank.</div>
+    </div>
+    <div class="toggle2" id="quizLevelToggle">
+      <button class="sel" data-level="easy">Level 1 · Easy (60)</button>
+      <button data-level="medium">Level 2 · Medium (50)</button>
+      <button data-level="hard">Level 3 · Hard (40)</button>
+    </div>
+    <div class="quiz-controls">
+      <button class="btn-primary" id="quizCheck">Check answers</button>
+      <button class="btn-ghost" id="quizReshuffle">Reshuffle questions</button>
+      <span class="quiz-score" id="quizScore">Score: —</span>
+    </div>
+    <div id="quizList"></div>
+  </section>
+
+</main>
+
+<footer>
+  <span>Study Smart · Group 14, the carbon family</span>
+  <span>© Anmar Taha. All rights reserved.</span>
+</footer>
+
+<script>
+/* ============================================================
+   NAV
+   ============================================================ */
+const sections = [
+  {id:'overview', sym:'Ov', label:'Overview'},
+  {id:'diagrams', sym:'Dg', label:'Diagrams & Data'},
+  {id:'map',      sym:'Mp', label:'Mini Map'},
+  {id:'flash',    sym:'Fc', label:'Flash Cards'},
+  {id:'quiz',     sym:'Qz', label:'Quiz Bank'},
+];
+const navEl = document.getElementById('navTiles');
+sections.forEach((s,i)=>{
+  const b = document.createElement('button');
+  b.className = 'tile-btn' + (i===0?' active':'');
+  b.dataset.target = s.id;
+  b.innerHTML = `<span class="idx">${i+1}</span><span class="sym">${s.sym}</span><span class="lbl">${s.label}</span>`;
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('.tile-btn').forEach(t=>t.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('section.pane').forEach(p=>p.classList.remove('active'));
+    document.getElementById('pane-'+s.id).classList.add('active');
+  });
+  navEl.appendChild(b);
+});
+document.getElementById('pane-overview').classList.add('active');
+
+/* ============================================================
+   1. OVERVIEW
+   ============================================================ */
+const overview = [
+  {group:'The family', items:[
+    ['Members','Carbon (C), Silicon (Si), Germanium (Ge), Tin (Sn), Lead (Pb) — group 14, column 14.'],
+    ['Valence electrons','All have 4 → strong tendency to form covalent compounds.'],
+    ['Trend down the group','Mass & atomic radius increase → more metallic character, lower melting/boiling points.'],
+    ['Metalloids','Silicon and germanium sit between metal and nonmetal.'],
+    ['Abundance','Si is the 2nd most abundant element in the crust (after O). Ge, Sn, Pb are comparatively rare.'],
+  ]},
+  {group:'Uses at a glance', items:[
+    ['Carbon','Organic life, fuels, diamond, graphite.'],
+    ['Silicon','Electronics, glass, ceramics, silicones.'],
+    ['Germanium','Optical fibers, transistors.'],
+    ['Tin','Bronze alloys, tin plating.'],
+    ['Lead','Batteries.'],
+  ]},
+  {group:'Bonding & compounds', items:[
+    ['Oxidation states','+2 and +4 possible; +4 dominates overall; +2 gains stability going down the group (Sn, Pb).'],
+    ['Multiple bonds','Carbon readily forms C=C / C≡C; the rest rarely form Si=Si-type bonds.'],
+    ['Oxides','SiO2 is an extended SiO4 network (O bridges Si atoms) — far more complex than discrete C=O.'],
+    ['Hydrides','Silanes (SiH4, ignite in air) > Germanes (GeH4, stable) > Stannanes (SnH4, decompose slowly) in reactivity.'],
+    ['Halides','Usually MX4; Ge, Sn, Pb also form MX2. SiCl4/GeCl4 are precursors to ultrapure Si/Ge; SiCl4 hydrolyses instantly in water.'],
+  ]},
+  {group:'Why silicon matters in drug design', items:[
+    ['Valency','Both C and Si carry 4 valence electrons — same starting point.'],
+    ['Coordination number','Si can expand 4→6 (uses 3d orbitals); but 4 (sp3) is favoured, so double/triple bonds are disfavoured.'],
+    ['Bond length','Si–Si (2.33 Å) is longer than C–C (1.54 Å) → more structural flexibility, different steric shape.'],
+    ['Electronegativity','Si (1.90) is more electropositive than C (2.55) → different bond polarization and reactivity.'],
+    ['Lipophilicity','Si-based compounds are more lipophilic → longer half-life, better for crossing the blood–brain barrier.'],
+  ]},
+  {group:'Key silicon-based drugs', items:[
+    ['Silylation','R3C–X–H → R3C–X–SiR′3 (X = N, O, S) — the standard way to attach a silyl group.'],
+    ['Carbon silylation','R3C–H → R3C–SiR′ — improves blood stability and cell penetration, alters pharmacokinetics.'],
+    ['Silabolin','Anabolic steroid with a trimethylsilyl group; low androgenic activity; risk of heart/liver defects.'],
+    ['Silperisone','Sila-analogue of tolperisone (muscle relaxant); discontinued after chronic toxicity in animals.'],
+    ['Silane-indomethacin','Carboxyl of indomethacin + amino-silanes → more lipophilic, more COX-2 selective, 15-fold more antiproliferative vs pancreatic cancer.'],
+    ['Sila-haloperidol','Sila-substituted haloperidol; different metabolism; more potent at the hD2 receptor.'],
+    ['Sila-venlafaxine','C→Si switch changes SNRI activity by stereoisomer; (R)-form favours noradrenaline reuptake inhibition.'],
+    ['Silatranes','Penta-coordinated Si; aryl/2-thienyl R = rodenticide; alkyl/alkenyl R = low toxicity, studied for collagen stimulation & anticancer use.'],
+    ['Silicones & silicone fluids','Used in catheters, implants, plastics; simethicone reduces bloating by lowering gas-bubble surface tension.'],
+  ]},
+];
+const ovWrap = document.getElementById('overviewContent');
+overview.forEach(g=>{
+  const div = document.createElement('div');
+  div.className = 'ov-group';
+  div.innerHTML = `<h3>${g.group}</h3><div class="ov-grid">${
+    g.items.map(([k,v])=>`<div class="law-card"><span class="k">${k}</span><p>${v}</p></div>`).join('')
+  }</div>`;
+  ovWrap.appendChild(div);
+});
+
+/* ============================================================
+   2. DIAGRAMS
+   ============================================================ */
+// -- Periodic table explorer
+const elements = [
+  {sym:'C', num:6,  config:'[He] 2s² 2p²', note:'Forms double & triple bonds readily. Basis of organic chemistry.'},
+  {sym:'Si',num:14, config:'[Ne] 3s² 3p²', note:'Metalloid. Coordination number can expand to 5–6 via 3d orbitals; sp3 (CN 4) is favoured.'},
+  {sym:'Ge',num:32, config:'[Ar] 3d¹⁰4s² 4p²', note:'Metalloid. Vital for optical fibers and transistors. Rare in nature.'},
+  {sym:'Sn',num:50, config:'[Kr] 4d¹⁰5s² 5p²', note:'More metallic. +2 state gains stability. Used in bronze and tin plating.'},
+  {sym:'Pb',num:82, config:'[Xe] 4f¹⁴5d¹⁰6s² 6p²', note:'Most metallic of the group. +2 state is well stabilised. Used in batteries.'},
+];
+const ptGrid = document.getElementById('ptGrid');
+const ptDetail = document.getElementById('ptDetail');
+elements.forEach((el,i)=>{
+  const c = document.createElement('div');
+  c.className = 'pt-cell';
+  c.innerHTML = `<span class="num">${el.num}</span><span class="el">${el.sym}</span>`;
+  c.addEventListener('click', ()=>{
+    document.querySelectorAll('.pt-cell').forEach(x=>x.classList.remove('sel'));
+    c.classList.add('sel');
+    ptDetail.innerHTML = `<b>${el.sym}</b> (Z = ${el.num}) — electron configuration <span class="mono">${el.config}</span>.<br>${el.note}`;
+  });
+  ptGrid.appendChild(c);
+});
+
+// -- Property comparison
+const propData = {
+  bond: {label:'Bond length', unit:'Å', max:2.5, c:1.54, si:2.33,
+    note:'C–C = 1.54 Å vs Si–Si = 2.33 Å. The longer silicon bond gives silicon-containing compounds greater structural flexibility and a different steric shape from their carbon counterparts.'},
+  eneg: {label:'Electronegativity (Pauling)', unit:'', max:2.6, c:2.55, si:1.90,
+    note:'Silicon (1.90) is more electropositive than carbon (2.55), so a C→Si swap changes bond polarization — which can shift chemical reactivity and, if hydrogen bonding matters for activity, potency itself.'},
+  lipo: {label:'Relative lipophilicity', unit:'× baseline', max:2, c:1.0, si:1.6,
+    note:'Silicon analogues are consistently more lipophilic than their carbon counterparts, which raises metabolic half-life and can help a drug cross the blood–brain barrier.'},
+};
+const propChips = document.getElementById('propChips');
+const propBars = document.getElementById('propBars');
+const propNote = document.getElementById('propNote');
+function renderProp(key){
+  const d = propData[key];
+  document.querySelectorAll('#propChips .chip').forEach(c=>c.classList.toggle('sel', c.dataset.k===key));
+  propBars.innerHTML = `
+    <div class="bar-row"><span class="lab">Carbon</span><div class="bar-track"><div class="bar-fill" style="width:${(d.c/d.max*100).toFixed(0)}%"></div></div><span class="bar-val">${d.c} ${d.unit}</span></div>
+    <div class="bar-row"><span class="lab">Silicon</span><div class="bar-track"><div class="bar-fill" style="width:${(d.si/d.max*100).toFixed(0)}%"></div></div><span class="bar-val">${d.si} ${d.unit}</span></div>
+  `;
+  propNote.textContent = d.note;
+}
+Object.keys(propData).forEach(k=>{
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  chip.dataset.k = k;
+  chip.textContent = propData[k].label;
+  chip.addEventListener('click', ()=>renderProp(k));
+  propChips.appendChild(chip);
+});
+renderProp('bond');
+
+// -- Oxidation state stability
+const oxData = [
+  {sym:'C', four:95, two:5,  note:'Carbon: the +4 state dominates almost completely; +2 (as in CO) is unusual.'},
+  {sym:'Si',four:92, two:8,  note:'Silicon: +4 strongly dominant, as in SiO2 and silanes; +2 chemistry is minor.'},
+  {sym:'Ge',four:80, two:20, note:'Germanium: +4 still dominant, but +2 compounds are more accessible than for C/Si.'},
+  {sym:'Sn',four:55, two:45, note:'Tin: +2 is now clearly stabilised alongside +4 (e.g. SnCl2 vs SnCl4 both common).'},
+  {sym:'Pb',four:35, two:65, note:'Lead: +2 becomes the more stable, dominant state — the reverse of carbon.'},
+];
+const oxRow = document.getElementById('oxRow');
+const oxNote = document.getElementById('oxNote');
+oxData.forEach((o,i)=>{
+  const col = document.createElement('div');
+  col.className = 'ox-col';
+  col.innerHTML = `
+    <div class="el" data-i="${i}">${o.sym}</div>
+    <div class="stack">
+      <div class="seg4" style="height:${o.four}%"></div>
+      <div class="seg2" style="height:${o.two}%"></div>
+    </div>
+  `;
+  oxRow.appendChild(col);
+  col.querySelector('.el').addEventListener('click', ()=>{
+    document.querySelectorAll('.ox-col .el').forEach(e=>e.classList.remove('sel'));
+    col.querySelector('.el').classList.add('sel');
+    oxNote.textContent = o.note;
+  });
+});
+
+// -- Silylation reaction builder
+const rxOptions = {N:'nitrogen', O:'oxygen', S:'sulfur'};
+const rxChips = document.getElementById('rxChips');
+const rxScheme = document.getElementById('rxScheme');
+function renderRx(x){
+  document.querySelectorAll('#rxChips .chip').forEach(c=>c.classList.toggle('sel', c.dataset.x===x));
+  rxScheme.innerHTML = `R₃C–<span class="hi">${x}</span>–H <span class="arrow">→</span> R₃C–<span class="hi">${x}</span>–SiR′₃ &nbsp; <span style="color:#9FB9BB;font-size:13px">(heteroatom used: ${rxOptions[x]})</span>`;
+}
+Object.keys(rxOptions).forEach(x=>{
+  const chip = document.createElement('button');
+  chip.className = 'chip';
+  chip.dataset.x = x;
+  chip.textContent = 'X = ' + x;
+  chip.addEventListener('click', ()=>renderRx(x));
+  rxChips.appendChild(chip);
+});
+renderRx('O');
+
+// -- Carbon silylation toggle
+const csScheme = document.getElementById('csScheme');
+function renderCs(v){
+  document.querySelectorAll('#csToggle button').forEach(b=>b.classList.toggle('sel', b.dataset.v===v));
+  csScheme.innerHTML = v==='off'
+    ? 'R₃C–H <span class="arrow">→</span> <span style="color:#9FB9BB">(plain carbon center — baseline stability, penetration and pharmacokinetics)</span>'
+    : 'R₃C–H <span class="arrow">→</span> R₃C–<span class="hi">SiR′</span> &nbsp; <span style="color:#5FD3C4;font-size:13px">→ enhanced blood stability · increased cell penetration · altered pharmacokinetics</span>';
+}
+document.querySelectorAll('#csToggle button').forEach(b=>b.addEventListener('click', ()=>renderCs(b.dataset.v)));
+renderCs('off');
+
+// -- Silatrane toxicity explorer
+const silaText = document.getElementById('silaText');
+const silaData = {
+  aryl:'Aryl- and 2-thienyl-substituted silatranes are proposed as rodenticides. They are known for self-detoxification, giving a low hazard for dermal toxicity or long-lasting secondary poisoning risk.',
+  alkyl:'Alkyl-, alkenyl- and other group-substituted silatranes are significantly less toxic. They are under evaluation for biological or clinical uses ranging from stimulating collagen biosynthesis to serving as anticancer agents.',
+};
+function renderSila(v){
+  document.querySelectorAll('#silaToggle button').forEach(b=>b.classList.toggle('sel', b.dataset.v===v));
+  silaText.textContent = silaData[v];
+}
+document.querySelectorAll('#silaToggle button').forEach(b=>b.addEventListener('click', ()=>renderSila(b.dataset.v)));
+renderSila('aryl');
+
+// -- Hydride table
+const hydrides = [
+  {family:'Silanes', el:'Silicon', formula:'SiH₄', detail:'Colorless gases or volatile oils, physically identical to their carbon counterparts. SiH4 spontaneously ignites in air.'},
+  {family:'Germanes', el:'Germanium', formula:'GeH₄', detail:'Less reactive than silanes — GeH4 is stable in air, unlike SiH4.'},
+  {family:'Stannanes', el:'Tin', formula:'SnH₄', detail:'Break down slowly in air into tin and hydrogen; the least stable of the three.'},
+];
+const hyBody = document.getElementById('hyBody');
+hydrides.forEach((h,i)=>{
+  const row = document.createElement('tr');
+  row.className = 'hy-row';
+  row.innerHTML = `<td>${h.family}</td><td>${h.el}</td><td class="mono">${h.formula}</td>`;
+  const detailRow = document.createElement('tr');
+  detailRow.className = 'hy-detail';
+  detailRow.innerHTML = `<td colspan="3">${h.detail}</td>`;
+  row.addEventListener('click', ()=>detailRow.classList.toggle('open'));
+  hyBody.appendChild(row);
+  hyBody.appendChild(detailRow);
+});
+
+/* ============================================================
+   3. MINI MAP
+   ============================================================ */
+const mapTopics = [
+  {t:'Group 14 membership', body:'<ul><li>Carbon (C), Silicon (Si), Germanium (Ge), Tin (Sn), Lead (Pb).</li><li>Sit in the 14th vertical column of the periodic table.</li></ul>'},
+  {t:'Electron configuration', body:'<ul><li>Four valence-shell electrons → tendency to form covalent compounds.</li><li>Increasing mass and atomic radius down the group → more metallic character, lower melting/boiling points.</li><li>Silicon and germanium are classed as metalloids.</li></ul>'},
+  {t:'Occurrence & use', body:'<ul><li>Silicon: 2nd most abundant element in the Earth\'s crust after oxygen.</li><li>Germanium, tin and lead are relatively rare.</li><li>Carbon → organic life, fuels, diamond, graphite.</li><li>Silicon → electronics, glass, ceramics, silicones.</li><li>Germanium → optical fibers, transistors.</li><li>Tin → bronze alloys, tin plating.</li><li>Lead → batteries.</li></ul>'},
+  {t:'Oxidation states', body:'<ul><li>+2 or +4 are both possible; +4 is dominant.</li><li>Stability of +2 increases further down the group (Sn, Pb).</li></ul>'},
+  {t:'Typical compounds', body:'<ul><li>The chemistry of the group differs from carbon, its naming element.</li><li>Carbon readily forms double and triple bonds; the rest rarely form Si–Si-type multiple bonds.</li></ul>'},
+  {t:'Oxides', body:'<ul><li>Silicon oxides have far more complex structures than carbon dioxide (C=O).</li><li>SiO2 (silica) is an extended array of SiO4 units, with oxygen atoms bridging neighbouring silicon atoms.</li></ul>'},
+  {t:'Hydrides', body:'<ul><li>Silanes (silicon hydrides): colorless gases/volatile oils, physically like carbon analogues.</li><li>SiH4 spontaneously ignites in air.</li><li>Germanes (germanium hydrides): less reactive — GeH4 is stable.</li><li>Stannanes (SnH4): break down slowly in air to tin and hydrogen; less stable.</li></ul>'},
+  {t:'Halides', body:'<ul><li>Group 14 elements generally form MX4-type compounds.</li><li>Germanium, tin and lead also form MX2-type compounds.</li><li>Tetrachlorides of Si and Ge are key precursors for ultrapure Si and Ge.</li><li>Silicon tetrachloride hydrolyses instantly in water.</li></ul>'},
+  {t:'I. Valency', body:'<ul><li>Silicon and carbon both have four valence electrons — analogous electron configuration.</li><li>C: [He]2s²2p² · Si: [Ne]3s²3p².</li></ul>'},
+  {t:'II. Coordination number', body:'<ul><li>Silicon\'s chemistry is affected by the accessibility of its 3d orbitals for extra bonding.</li><li>Silicon can raise its coordination number from 4 to 6, forming isolatable penta- and hexacoordinated compounds.</li><li>Coordination number 4 (sp3) is still favoured for silicon, disfavouring double/triple bonds versus carbon reaction centers.</li></ul>'},
+  {t:'III. Bond length', body:'<ul><li>Silicon has a larger covalent radius than carbon → longer bonds (C–C = 1.54 Å, Si–Si = 2.33 Å).</li><li>Silicon-containing compounds show greater structural flexibility and distinct steric configurations.</li><li>This changes protein interactions, and therefore pharmacodynamics and pharmacological profiles.</li></ul>'},
+  {t:'IV. Electronegativity', body:'<ul><li>Silicon is more positive than carbon (Pauling: Si = 1.90, C = 2.55).</li><li>Different bond polarization versus the analogous carbon compound.</li><li>Chemical reactivity and bond strength can differ significantly, altering potency — especially where hydrogen bonding drives the mode of action.</li></ul>'},
+  {t:'V. Lipophilicity', body:'<ul><li>Silicon-based compounds are more lipophilic than their carbon analogues, owing to their different covalent radii.</li><li>Increased half-life after hepatic metabolism versus carbon analogues.</li><li>Useful for designing drugs meant to cross the blood–brain barrier.</li></ul>'},
+  {t:'Silylation', body:'<ul><li>A convenient way to introduce a silicon group.</li><li>Exchanges the H atom bonded to a heteroatom (S, N, or O) for a silyl group (SiR′3).</li><li>R3C–X–H → R3C–X–SiR′3, where X = N, O, S.</li></ul>'},
+  {t:'Carbon silylation', body:'<ul><li>Introduces a silicon group next to a carbon center: R3C–H → R3C–SiR′.</li><li>Used to design novel drugs by changing properties, leading to enhanced blood stability, increased cell penetration, and altered pharmacokinetics.</li></ul>'},
+  {t:'Silabolin', body:'<ul><li>Example of a silylation application — an injectable steroid containing a trimethylsilyl group.</li><li>Used by bodybuilders as an anabolic preparation with relatively low androgenic activity, like testosterone.</li><li>White powder, sparingly soluble in ethanol, not soluble in water.</li><li>Potential to cause heart and liver defects.</li></ul>'},
+  {t:'Silperisone', body:'<ul><li>Tolperisone is a centrally acting muscle relaxant used for acute muscle spasms in back pain.</li><li>Silperisone (its silicon analogue) showed chronic toxicities in animal studies, and the research was discontinued.</li></ul>'},
+  {t:'Indomethacin', body:'<ul><li>A Nonsteroidal Anti-inflammatory Drug (NSAID) and COX (cyclooxygenase) inhibitor, interrupting prostaglandin production.</li><li>Used to treat pain, moderate-to-severe inflammation in rheumatic disease, and other musculoskeletal disorders.</li></ul>'},
+  {t:'Silicon-indomethacin derivatives', body:'<ul><li>New silicon compounds based on indomethacin\'s structure were synthesized and evaluated as novel anticancer agents.</li><li>Indomethacin\'s carboxyl group was reacted with a series of amino-functionalized silanes.</li><li>Products were significantly more lipophilic and more selective to COX-2.</li><li>In vitro testing showed increased uptake at the tumor site.</li><li>The silane-functionalized derivatives showed a 15-fold increase in antiproliferative effect against pancreatic cancer.</li></ul>'},
+  {t:'Silicon isosteres', body:'<ul><li>Replacing carbon with silicon in biologically active reagents.</li><li>Resulting changes in bond length and lipophilicity significantly affect biological activity.</li><li>Examples: sila-haloperidol and sila-venlafaxine.</li></ul>'},
+  {t:'Haloperidol', body:'<ul><li>An older antipsychotic drug, a dopamine D2 receptor antagonist.</li><li>Used to treat schizophrenia — a neuropsychiatric disorder from problems in brain dopamine regulation.</li><li>Symptoms include hallucinations, delusions, and disorganized speech.</li><li>Antipsychotics generally work by blocking dopamine D2 receptors.</li><li>Use is limited by a high incidence of extrapyramidal (movement) symptoms.</li><li>Still used for rapid control of hyperactive psychotic states and for restlessness in the elderly.</li></ul>'},
+  {t:'Sila-haloperidol', body:'<ul><li>The silicon analogue, synthesized by sila-substitution of the quaternary R3COH carbon atom of haloperidol.</li><li>Biological studies show large differences between the metabolic pathways of the silicon and carbon analogues.</li><li>Sila-haloperidol was significantly more potent at the hD2 receptor — hope for improved metabolism-related side effects.</li></ul>'},
+  {t:'Venlafaxine', body:'<ul><li>A serotonin and noradrenalin reuptake inhibitor (SNRI), used as an antidepressant.</li><li>Compared to tricyclic antidepressants (TCAs), it lacks antimuscarinic and sedative side effects.</li><li>Treatment can carry a higher risk of withdrawal symptoms.</li></ul>'},
+  {t:'Sila-venlafaxine', body:'<ul><li>The silicon analogue of venlafaxine.</li><li>The carbon–silicon switch changed the pharmacological profile significantly regarding reuptake inhibition, depending on the stereoisomer.</li><li>(R)-Sila-venlafaxine was consistent with selective reuptake inhibition at the noradrenaline transporter.</li></ul>'},
+  {t:'Organosilicon drugs', body:'<ul><li>Several classes of silicon compounds have clinical use or proposed biological activity with no apparent carbon analogue.</li><li>They exploit silicon\'s ability to form penta- and hexacoordinated centers.</li><li>Examples: silatranes, silicone, silicone fluids.</li></ul>'},
+  {t:'Silatranes', body:'<ul><li>Silicon compounds where the central silicon atom is penta-coordinated.</li><li>Toxicity can be high, depending on the organic (R) group at the silicon center.</li><li>Aryl and 2-thienyl-substituted silatranes: proposed as rodenticides, low dermal toxicity, low secondary poisoning risk (self-detoxifying).</li><li>Alkyl, alkenyl and other groups: significantly less toxic; evaluated for stimulating collagen biosynthesis and as anticancer agents.</li></ul>'},
+  {t:'Silicones', body:'<ul><li>Oligo- and polysiloxanes — the most widely used class of silicon-based compounds clinically.</li><li>Found in plastics, lubricants, catheters, implants and other medically used items.</li></ul>'},
+  {t:'Silicone fluids', body:'<ul><li>Example: simethicone — an orally administered suspension containing polysiloxanes and silicon dioxide.</li><li>An antifoaming agent that reduces bloating by decreasing the surface tension of gas bubbles (excess gas bubbles in the stomach/intestines can be painful and interfere with ultrasound exams).</li><li>Found in antacids and in suspensions given to babies against colic.</li></ul>'},
+];
+const mapList = document.getElementById('mapList');
+const mapDisplay = document.getElementById('mapDisplay');
+mapTopics.forEach((m,i)=>{
+  const btn = document.createElement('button');
+  btn.className = 'map-item';
+  btn.textContent = m.t;
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.map-item').forEach(x=>x.classList.remove('sel'));
+    btn.classList.add('sel');
+    mapDisplay.innerHTML = `<h3>${m.t}</h3><div class="body-text">${m.body}</div>`;
+  });
+  mapList.appendChild(btn);
+});
+
+/* ============================================================
+   4. FLASHCARDS
+   ============================================================ */
+const flashcardsByLevel = {
+  easy: [
+  ["Elements of Group 14 (carbon group)","Carbon (C), Silicon (Si), Germanium (Ge), Tin (Sn), Lead (Pb)"],
+  ["Valence electrons in Group 14","4"],
+  ["Atomic number of carbon","6"],
+  ["Atomic number of silicon","14"],
+  ["Atomic number of germanium","32"],
+  ["Atomic number of tin","50"],
+  ["Atomic number of lead","82"],
+  ["Electron configuration of carbon","[He]2s²2p²"],
+  ["Electron configuration of silicon","[Ne]3s²3p²"],
+  ["Electron configuration of germanium","[Ar]3d¹⁰4s²4p²"],
+  ["Electron configuration of tin","[Kr]4d¹⁰5s²5p²"],
+  ["Electron configuration of lead","[Xe]4f¹⁴5d¹⁰6s²6p²"],
+  ["Group 14 metalloids","Silicon and germanium"],
+  ["2nd most abundant element in Earth's crust","Silicon"],
+  ["Relatively rare Group 14 elements","Germanium, tin, and lead"],
+  ["What carbon forms in nature","Organic life, fuels, diamond, and graphite"],
+  ["Main use of silicon","Electronics, glass, ceramics, and silicones"],
+  ["Main use of germanium","Optical fibers and transistors"],
+  ["Main use of tin","Alloys like bronze and tin plating"],
+  ["Main use of lead","Batteries"],
+  ["Group 14 oxidation states","+2 and +4"],
+  ["Dominant Group 14 oxidation state","+4"],
+  ["Elements where the +2 state is most stable","Tin and lead"],
+  ["Element that readily forms double/triple bonds","Carbon"],
+  ["Most basic silicon oxide molecule","SiO2 (silica)"],
+  ["What links neighboring silicon atoms in silica","Bridging oxygen atoms of SiO4 units"],
+  ["Silanes are","Silicon hydrides"],
+  ["Germanes are","Germanium hydrides"],
+  ["Stannanes are","Tin hydrides"],
+  ["Behaviour of SiH4 in air","Spontaneously ignites"],
+  ["Is GeH4 stable in air?","Yes, stable (unlike SiH4)"],
+  ["Stannanes break down slowly in air to","Tin and hydrogen"],
+  ["General halide formula for Group 14","MX4"],
+  ["Elements that also form MX2 halides","Germanium, tin, and lead"],
+  ["Silicon tetrachloride in contact with water","Hydrolyses instantly"],
+  ["Valence electrons shared by carbon and silicon","4, with an analogous ns²np² configuration"],
+  ["What silicon uses its accessible 3d orbitals for","Expanding its coordination number"],
+  ["Maximum coordination number silicon can reach","6 (hexacoordinated)"],
+  ["Favoured coordination number/hybridization for silicon","4 (sp3)"],
+  ["Which bond is longer, C–C or Si–Si?","Si–Si"],
+  ["C–C bond length","1.54 Å"],
+  ["Si–Si bond length","2.33 Å"],
+  ["Pauling electronegativity of carbon","2.55"],
+  ["Pauling electronegativity of silicon","1.90"],
+  ["Which is more electropositive, silicon or carbon?","Silicon"],
+  ["What silylation replaces","The H atom bonded to N, O, or S with a silyl group"],
+  ["General silylation reaction","R3C-X-H → R3C-X-SiR'3 (X = N, O, S)"],
+  ["Silicon-based group in Silabolin","Trimethylsilyl group"],
+  ["Silabolin's main toxicity risk","Heart and liver defects"],
+  ["Silperisone is the sila-analogue of","Tolperisone"],
+  ["Drug class of indomethacin","NSAID (nonsteroidal anti-inflammatory drug)"],
+  ["Enzyme indomethacin inhibits","COX (cyclooxygenase)"],
+  ["What indomethacin treats","Pain, rheumatic inflammation, and musculoskeletal disorders"],
+  ["Antiproliferative effect increase of silane-indomethacin derivatives vs pancreatic cancer","15-fold"],
+  ["What haloperidol treats","Schizophrenia"],
+  ["Receptor haloperidol blocks","Dopamine D2 receptor"],
+  ["Main side effect limiting haloperidol use","Extrapyramidal symptoms"],
+  ["Drug class of venlafaxine","SNRI (serotonin–noradrenalin reuptake inhibitor)"],
+  ["Silatranes' central atom coordination","Penta-coordinated silicon"],
+  ["Where simethicone is commonly found","Antacids and infant colic suspensions"],
+],
+  medium: [
+  ["Why Group 14 elements favor covalent bonding","Their 4 valence electrons favor electron sharing rather than complete transfer"],
+  ["Trend in metallic character down Group 14","Increases with increasing mass and atomic radius"],
+  ["Why Si and Ge are metalloids","Their properties sit between carbon (covalent) and tin/lead (metallic)"],
+  ["Why silica is structurally more complex than CO2","Silicon builds an extended SiO4 network with bridging oxygens rather than discrete Si=O bonds"],
+  ["Why SiH4 is more hazardous than GeH4","SiH4 ignites spontaneously in air; GeH4 is stable"],
+  ["Industrial importance of SiCl4 and GeCl4","Precursors for synthesizing ultrapure silicon and germanium"],
+  ["Why silicon rarely forms Si=Si double bonds","Silicon strongly favors sp3/CN4, which disfavors multiple bond formation"],
+  ["Why silicon (unlike carbon) can reach CN 5 or 6","Its accessible 3d orbitals allow extra bonding interactions"],
+  ["Consequence of silicon's larger covalent radius","Longer bonds and greater structural/steric flexibility than carbon analogues"],
+  ["Effect of altered steric configuration on silicon drugs","Changes protein interactions, altering pharmacodynamics"],
+  ["Effect of Si vs C electronegativity on bond polarization","Silicon's greater electropositivity changes bond polarization vs analogous carbon bonds"],
+  ["Why a C→Si switch can alter drug potency","Altered bond polarization changes reactivity/bond strength, especially with H-bonding involved"],
+  ["Why silicon compounds are more lipophilic than carbon analogues","Their different, larger covalent radii enhance lipophilicity"],
+  ["Clinical value of silicon drugs' higher lipophilicity","Aids crossing the blood–brain barrier"],
+  ["Why silicon compounds show longer hepatic half-life","Their higher lipophilicity slows hepatic metabolism"],
+  ["Difference between silylation and carbon silylation","Silylation caps N/O/S–H bonds; carbon silylation adds Si next to a carbon center"],
+  ["Pharmacokinetic effect of carbon silylation","Enhances blood stability and cell penetration; alters pharmacokinetics"],
+  ["Clinical relevance of Silabolin's solubility profile","Sparingly soluble in ethanol, insoluble in water; given as an injectable"],
+  ["Why Silperisone's development was discontinued","Chronic toxicities appeared in animal studies"],
+  ["Purpose of silane-functionalized indomethacin derivatives","Improve lipophilicity and COX-2 selectivity, evaluated as anticancer agents"],
+  ["In vitro finding on silane-indomethacin tumor uptake","Increased uptake of the new compounds at the tumor site"],
+  ["Group of indomethacin modified with silanes","The carboxyl group"],
+  ["What a silicon isostere drug is","A compound where carbon is replaced by silicon to alter bond length/lipophilicity and biological activity"],
+  ["Site of sila-substitution in sila-haloperidol","The quaternary R3COH carbon atom of haloperidol"],
+  ["Biological studies finding for sila- vs plain haloperidol","Large differences between their metabolic pathways"],
+  ["Clinical promise of sila-haloperidol's increased hD2 potency","Hope for improved side effects related to metabolism"],
+  ["Why D2 blockade causes extrapyramidal symptoms","D2 receptors are part of the motor (extrapyramidal) neural network"],
+  ["Venlafaxine's advantage over TCAs","Lacks antimuscarinic and sedative side effects"],
+  ["Disadvantage of venlafaxine vs TCAs","Higher risk of withdrawal symptoms"],
+  ["Why stereochemistry matters for sila-venlafaxine","The C→Si switch changes reuptake-inhibition profile depending on the stereoisomer"],
+  ["Sila-venlafaxine stereoisomer with noradrenaline selectivity","(R)-sila-venlafaxine"],
+  ["Why some organosilicon drugs lack a carbon analogue","They rely on silicon's unique penta-/hexacoordination ability"],
+  ["Why silatrane toxicity varies widely","It depends entirely on the R group at the silicon center"],
+  ["Why aryl/2-thienyl silatranes are safer rodenticides","They self-detoxify, lowering dermal and secondary-poisoning risk"],
+  ["Applications being studied for alkyl/alkenyl silatranes","Collagen biosynthesis stimulation and anticancer use"],
+  ["Why silicones dominate clinical silicon-compound use","Their versatility as plastics, lubricants, catheters, and implants"],
+  ["How simethicone reduces bloating","By decreasing the surface tension of gas bubbles"],
+  ["Clinical problem caused by excess gas bubbles","They can hinder ultrasound examinations"],
+  ["Five properties compared between C and Si in drug design","Valency, coordination number, bond length, electronegativity, lipophilicity"],
+  ["Why Si and C differ despite equal valence electrons","They differ in coordination number, bond length, electronegativity, and lipophilicity"],
+  ["Basis for using the electron-configuration analogy in drug design","Both C and Si share an ns²np² outer configuration"],
+  ["Why silicon's sp3 preference limits multiple-bond mimicry","CN4/sp3 disfavors double/triple bond formation, unlike carbon"],
+  ["Common theme of Silabolin, Silperisone, sila-haloperidol, sila-venlafaxine","Silicon introduced into/beside a drug's carbon skeleton to alter its pharmacology"],
+  ["Why SiO2's structure is far more complex than CO2's","It forms an extended network of SiO4 tetrahedra, not discrete molecules"],
+  ["Role of silicon's accessible 3d orbitals","Enables expanded coordination number, e.g., in silatranes"],
+  ["Why sila-substitution targets a hydroxyl-bearing quaternary carbon","Preserves valency/geometry while changing electronic and steric properties"],
+  ["Why hydride stability differs (silane vs germane vs stannane)","It shifts down the group, with silanes being least stable/most reactive"],
+  ["Why Ge, Sn, and Pb also form MX2 halides","The +2 state grows more stable further down Group 14"],
+  ["Practical significance of SiCl4's instant hydrolysis","Must be handled under strictly anhydrous conditions"],
+  ["Underlying atomic property behind silicon's distinct drug behavior","Larger covalent radius and accessible 3d orbitals vs carbon"],
+],
+  hard: [
+  ["Why replacing a carbon center with silicon doesn't create a truly interchangeable analogue","Despite equal valency, Si and C differ in coordination number, bond length, electronegativity, and lipophilicity, altering sterics, polarization, and pharmacokinetics"],
+  ["Effect of Si vs C electronegativity on a Si–O bond vs a C–O bond","The Si–O bond is more polarized, since silicon (1.90) is less electronegative than carbon (2.55)"],
+  ["Why direct Si substitution at a C=C or C=O pharmacophore is avoided","Silicon disfavors double bonds, so sila-substitution is applied at saturated (often quaternary) carbon centers instead"],
+  ["Reasoning chain: indomethacin carboxyl silane functionalization → 15-fold antiproliferative effect","Higher lipophilicity and COX-2 selectivity improve tumor uptake, boosting the antiproliferative effect"],
+  ["Why silicon's lipophilicity gives both better BBB penetration and higher toxicity risk","Greater lipophilicity aids membrane diffusion for CNS penetration but also slows hepatic clearance, raising accumulation risk"],
+  ["What sila-haloperidol's potency + differing metabolism suggests about haloperidol's side effects","Extrapyramidal side effects may be more linked to haloperidol's carbon-based metabolic pathway than to D2 blockade alone"],
+  ["What (R)-sila-venlafaxine's selectivity reveals about the C→Si switch at a stereocenter","Silicon's longer bonds/different geometry change substituent arrangement, altering enantiomer-specific target fit"],
+  ["Why silatranes have 'no carbon analogue' — mechanistic basis","They rely on a penta-coordinated Si center via a dative N→Si bond, enabled by accessible 3d orbitals, impossible for carbon"],
+  ["Principle illustrated by aryl/2-thienyl vs alkyl/alkenyl silatrane toxicity","Peripheral R-group substituents can tune the same core scaffold from toxic rodenticide to therapeutic candidate (SAR)"],
+  ["Why SiCl4 hydrolyzes instantly while CCl4 resists hydrolysis","Silicon forms a pentacoordinate transition state via accessible d-orbitals for fast substitution; carbon cannot"],
+  ["Structural difference: silicon isosteres vs carbon silylation","Isosteres replace a carbon atom with silicon; carbon silylation appends a silyl group next to an existing carbon"],
+  ["Why choose heteroatom silylation over full sila-substitution first","Silylation is simpler, modifying a labile N/O/S–H bond without altering the core skeleton, for quick property screening"],
+  ["Why Silabolin's trimethylsilyl group may raise heart/liver toxicity risk","Enhanced lipophilicity can extend half-life and tissue accumulation in lipid-rich organs like liver and heart"],
+  ["Lesson from Silperisone's discontinuation","Sila-substitution can introduce unpredictable toxic pathways even when structurally analogous, requiring independent safety testing"],
+  ["Why delayed hepatic clearance of Si drugs and SiCl4's instant hydrolysis aren't contradictory","Reactivity depends on silicon's substituents — a shielded Si–C drug framework resists breakdown, unlike a reactive Si–Cl bond"],
+  ["How the five key properties jointly determine a sila-analogue's activity","They govern bonding pattern, geometry/multiple-bond capacity, steric fit, bond polarization/H-bonding, and pharmacokinetics together"],
+  ["Significance of (R)-sila-venlafaxine's selectivity given venlafaxine is a dual SNRI","Sila-substitution plus stereochemistry can narrow a drug's dual target profile toward one more selective target"],
+  ["Why silicon favors CN4/sp3 yet can form penta-/hexacoordinated silatranes","Its larger size and accessible d-orbitals allow extra ligands (dative N→Si bonds) to expand coordination under the right ligand environment"],
+  ["Periodic trend linking hydride instability (up group) and MX2 stability (down group)","Both reflect increasing metallic character and stability of lower oxidation states/weaker bonds down Group 14 (inert pair effect)"],
+  ["Why silicon can't form a discrete O=Si=O molecule like CO2","Silicon's larger 3p orbitals overlap poorly with oxygen's 2p orbitals for π-bonding, favoring an extended SiO4 network instead"],
+  ["Why replacing a labile C=C with a silicon isostere is chemically unsound","Silicon strongly disfavors double bond formation (favoring CN4/sp3), so it cannot directly substitute at an unsaturated position"],
+  ["Why the lecture frames silicon as having 'similarities and differences' vs calling it a direct substitute","Silicon substitution changes multiple physicochemical parameters simultaneously — some beneficial, some detrimental — making it a design tool, not a drop-in swap"],
+  ["Shared silicon property behind improved COX-2 selectivity and improved D2 potency","Altered steric/electronic profile from longer bonds, different electronegativity, and greater lipophilicity changes target-binding fit"],
+  ["Why an N–H/O–H/S–H-metabolized drug suits silylation for stability","Silylation caps the reactive bond with a bulkier, more lipophilic group, protecting it from premature degradation and improving permeability"],
+  ["What Ge and Sn's rarity yet industrial value implies about abundance vs relevance","Importance is determined by unique chemical/physical properties, not natural abundance"],
+  ["Why lead favors Pb2+/Pb4+ battery chemistry over tetravalent organolead compounds","The inert pair effect makes lead's valence electron pair reluctant to bond, stabilizing +2 over +4"],
+  ["Why silylation and carbon silylation are mechanistically distinct strategies","Silylation modifies a labile heteroatom bond; carbon silylation alters the carbon skeleton itself and overall lipophilicity/pharmacokinetics"],
+  ["Why simethicone's mechanism differs pharmacologically from an antacid's","Simethicone acts physically (coalescing bubbles), not chemically (neutralizing acid) — a mechanically distinct mode of action"],
+  ["Predicted stability of a hypothetical plumbane (PbH4) vs stannane","Less stable, since lead strongly favors +2 over +4, continuing the trend of decreasing +4-hydride stability down the group"],
+  ["Why coordination number is treated separately from valency for Si vs C","Coordination number can exceed formal valency for silicon (up to 6, via dative/d-orbital interactions), which carbon structurally lacks"],
+  ["Why Si–O/Si–N bonds in prodrugs are expected to cleave more readily than C–O/C–N bonds","Silicon's larger, more polarizable center and accessible d-orbitals make Si-heteroatom bonds more susceptible to nucleophilic attack"],
+  ["Lesson from sila-haloperidol (potency gain) vs sila-venlafaxine (selectivity shift)","Sila-substitution effects are case-specific, so each analogue must be evaluated individually rather than assuming a universal benefit"],
+  ["How the MX4/MX2 halide pattern relates to the +4/+2 oxidation-state trend","They describe the same trend: +4/MX4 dominates overall, but +2/MX2 grows more accessible in the heavier elements"],
+  ["Why indomethacin's carboxyl group (not another group) was chosen for silane attachment","It offers a reactive site for amide coupling with amine-terminated silanes without disrupting the core COX-inhibiting pharmacophore"],
+  ["Trade-off when using silicon substitution to improve CNS drug delivery","Improved CNS penetration/potency must be weighed against slower hepatic clearance and greater accumulation-related toxicity risk"],
+  ["Why Si–C bonds remain stable despite silicon's greater electropositivity","Reactivity depends mainly on the substituents attached to silicon (e.g., Si–Cl, Si–O), not electropositivity alone; Si–C bonds are robust"],
+  ["How silatranes and silicones each achieve 'no carbon analogue' uniqueness","Silatranes form a penta-coordinated Si center via a dative N→Si bond; silicones form extended Si–O–Si polymer backbones"],
+  ["Why Si substitution favors quaternary (sp3) over aromatic (sp2) carbon centers","Silicon favors sp3/CN4 geometry matching a quaternary carbon; aromatic/sp2 positions require conjugated multiple bonding that silicon disfavors"],
+  ["Why coordination number, bond length, and electronegativity act jointly on pharmacodynamics","Target binding depends simultaneously on shape, electronic distribution, and binding energetics, so these properties combine to determine fit"],
+  ["Why the lecture covers Group 14 inorganic chemistry before pharmaceutical silicon chemistry","The fundamental periodic/bonding trends provide the mechanistic foundation for predicting how silicon substitution alters drug properties"],
+]
+};
+let fcLevel = 'easy';
+const fcGrid = document.getElementById('fcGrid');
+function renderFlashcards(){
+  const list = flashcardsByLevel[fcLevel];
+  fcGrid.innerHTML = '';
+  document.getElementById('fcCount').textContent = list.length + ' cards';
+  list.forEach(([front,back])=>{
+    const card = document.createElement('div');
+    card.className = 'fc-card';
+    card.innerHTML = `
+      <div class="fc-inner">
+        <div class="fc-face fc-front"><span class="tag">TERM</span>${front}</div>
+        <div class="fc-face fc-back"><span class="tag">ANSWER</span>${back}</div>
+      </div>`;
+    card.addEventListener('click', ()=>card.classList.toggle('flipped'));
+    fcGrid.appendChild(card);
+  });
+}
+renderFlashcards();
+document.getElementById('fcReset').addEventListener('click', ()=>{
+  document.querySelectorAll('.fc-card').forEach(c=>c.classList.remove('flipped'));
+});
+document.getElementById('fcLevelToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button[data-level]');
+  if(!btn) return;
+  fcLevel = btn.dataset.level;
+  document.querySelectorAll('#fcLevelToggle button').forEach(b=>b.classList.toggle('sel', b===btn));
+  renderFlashcards();
+});
+
+/* ============================================================
+   5. QUIZ BANK
+   ============================================================ */
+const quizByLevel = {
+  easy: [
+  ["Which elements make up Group 14?","Carbon, silicon, germanium, tin, and lead",["Nitrogen, phosphorus, arsenic, antimony, bismuth","Boron, aluminium, gallium, indium, thallium","Oxygen, sulfur, selenium, tellurium, polonium"]],
+  ["How many valence electrons do Group 14 elements have?","4",["2","6","8"]],
+  ["What is the atomic number of carbon?","6",["12","14","8"]],
+  ["What is the atomic number of silicon?","14",["6","32","28"]],
+  ["What is the atomic number of germanium?","32",["14","50","72"]],
+  ["What is the atomic number of tin?","50",["32","82","118"]],
+  ["What is the atomic number of lead?","82",["50","118","204"]],
+  ["What is the electron configuration of carbon?","[He]2s²2p²",["[Ne]3s²3p²","[He]2s²2p⁴","[Ar]3d¹⁰4s²4p²"]],
+  ["What is the electron configuration of silicon?","[Ne]3s²3p²",["[He]2s²2p²","[Ar]4s²4p²","[Kr]4d¹⁰5s²5p²"]],
+  ["What is the electron configuration of germanium?","[Ar]3d¹⁰4s²4p²",["[Ne]3s²3p²","[Kr]4d¹⁰5s²5p²","[Xe]4f¹⁴5d¹⁰6s²6p²"]],
+  ["What is the electron configuration of tin?","[Kr]4d¹⁰5s²5p²",["[Ar]3d¹⁰4s²4p²","[Xe]4f¹⁴5d¹⁰6s²6p²","[Ne]3s²3p²"]],
+  ["What is the electron configuration of lead?","[Xe]4f¹⁴5d¹⁰6s²6p²",["[Kr]4d¹⁰5s²5p²","[Ar]3d¹⁰4s²4p²","[Rn]5f¹⁴6d¹⁰7s²7p²"]],
+  ["Which two Group 14 elements are metalloids?","Silicon and germanium",["Carbon and silicon","Tin and lead","Germanium and tin"]],
+  ["Which element is the second most abundant in Earth's crust, after oxygen?","Silicon",["Carbon","Aluminium","Iron"]],
+  ["Which three Group 14 elements are relatively rare in nature?","Germanium, tin, and lead",["Carbon and silicon","Silicon and germanium","Carbon, silicon, and germanium"]],
+  ["Carbon forms which natural materials?","Organic life, fuels, diamond, and graphite",["Glass and ceramics","Bronze alloys","Battery plates"]],
+  ["Silicon is crucial for which application?","Electronics, glass, ceramics, and silicones",["Batteries","Bronze alloys","Rodenticides"]],
+  ["Germanium is vital for:","Optical fibers and transistors",["Batteries","Tin plating","Bronze alloys"]],
+  ["Tin is commonly used in:","Alloys like bronze and tin plating",["Batteries","Optical fibers","Silicone implants"]],
+  ["Lead is primarily used in:","Batteries",["Transistors","Silicone implants","Bronze alloys"]],
+  ["What are the two main oxidation states of Group 14 elements?","+2 and +4",["+1 and +3","+3 and +5","−2 and +2"]],
+  ["Which oxidation state dominates in Group 14?","+4",["+2","+1","+3"]],
+  ["The +2 oxidation state is most stable for which elements?","Tin and lead",["Carbon and silicon","Silicon and germanium","Carbon and germanium"]],
+  ["Which element readily forms double and triple bonds, unlike the rest of the group?","Carbon",["Silicon","Germanium","Tin"]],
+  ["What is the most basic silicon oxide molecule?","SiO2 (silica)",["SiO (silicon monoxide)","Si2O3","SiC"]],
+  ["What links neighboring silicon atoms in silica?","Bridging oxygen atoms of SiO4 units",["Direct Si–Si double bonds","Hydrogen bridges","Chlorine bridges"]],
+  ["Silanes are:","Silicon hydrides",["Germanium hydrides","Tin hydrides","Silicon halides"]],
+  ["Germanes are:","Germanium hydrides",["Silicon hydrides","Tin hydrides","Germanium halides"]],
+  ["Stannanes are:","Tin hydrides",["Silicon hydrides","Germanium hydrides","Tin halides"]],
+  ["What happens when SiH4 meets air?","It spontaneously ignites",["It remains completely stable","It slowly decomposes","It turns into silica"]],
+  ["Is GeH4 stable in air?","Yes, stable (unlike SiH4)",["No, it ignites spontaneously","No, it explodes on contact with water","No, it sublimes immediately"]],
+  ["Stannanes break down slowly in air to:","Tin and hydrogen",["Silicon and hydrogen","Tin oxide and water","Tin chloride and hydrogen"]],
+  ["Group 14 elements generally form halides of the type:","MX4",["MX3","MX5","MX6"]],
+  ["Which elements also form MX2-type halides?","Germanium, tin, and lead",["Carbon and silicon","Silicon only","Carbon only"]],
+  ["Silicon tetrachloride in contact with water:","Hydrolyses instantly",["Remains unreactive","Forms silicon gas","Sublimes"]],
+  ["How many valence electrons do carbon and silicon share, given their analogous configurations?","4, with an analogous ns²np² configuration",["2, with a very different configuration","6, with an analogous configuration","4, but a completely different configuration"]],
+  ["What does silicon use its accessible 3d orbitals for?","Expanding its coordination number",["Forming double bonds","Lowering its electronegativity","Reducing its atomic radius"]],
+  ["What is the maximum coordination number silicon can reach?","6 (hexacoordinated)",["4 only","8","3"]],
+  ["What is the favoured coordination number/hybridization for silicon?","4 (sp3 hybridization)",["6 (sp3d2)","5 (sp3d)","3 (sp2)"]],
+  ["Which bond is longer, C–C or Si–Si?","Si–Si",["C–C","They are equal","Neither, both are ionic"]],
+  ["What is the C–C bond length?","1.54 Å",["2.33 Å","1.10 Å","3.00 Å"]],
+  ["What is the Si–Si bond length?","2.33 Å",["1.54 Å","1.10 Å","3.00 Å"]],
+  ["What is the Pauling electronegativity of carbon?","2.55",["1.90","3.44","2.20"]],
+  ["What is the Pauling electronegativity of silicon?","1.90",["2.55","3.44","2.20"]],
+  ["Which is more electropositive, silicon or carbon?","Silicon",["Carbon","Both are equal","Neither, both are electronegative"]],
+  ["What does silylation replace?","The H atom bonded to a heteroatom (N, O, or S)",["A C–H bond in an alkane","A double bond in an alkene","A halogen on carbon"]],
+  ["What is the general silylation reaction?","R3C-X-H → R3C-X-SiR'3 (X = N, O, S)",["R3C-H → R3C-Cl","R3C-OH → R3C-COOH","R3C-X-H → R3C-X-H2"]],
+  ["Silabolin contains which silicon-based group?","A trimethylsilyl group",["A silatrane group","A silicone group","A silane group"]],
+  ["Silabolin carries a risk of:","Heart and liver defects",["Kidney failure only","Respiratory failure","Bone marrow suppression"]],
+  ["Silperisone is the sila-analogue of:","Tolperisone",["Haloperidol","Venlafaxine","Indomethacin"]],
+  ["Indomethacin belongs to which drug class?","NSAID (COX inhibitor)",["SNRI antidepressant","Antipsychotic","Anabolic steroid"]],
+  ["What does indomethacin treat?","Pain, rheumatic inflammation, and musculoskeletal disorders",["Bacterial infections","Hypertension","Diabetes"]],
+  ["Silane-functionalized indomethacin derivatives showed how much increase in antiproliferative effect vs pancreatic cancer?","15-fold",["5-fold","50-fold","2-fold"]],
+  ["What does haloperidol treat?","Schizophrenia",["Depression","Hypertension","Muscle spasms"]],
+  ["Which receptor does haloperidol block?","Dopamine D2 receptor",["Serotonin receptor","COX enzyme","Sodium channel"]],
+  ["What is the main side effect limiting haloperidol's use?","Extrapyramidal symptoms",["Severe allergic reactions","Liver toxicity only","Kidney damage only"]],
+  ["What drug class is venlafaxine?","SNRI (serotonin–noradrenalin reuptake inhibitor)",["NSAID","Antipsychotic","Anabolic steroid"]],
+  ["What is the coordination number of the central atom in a silatrane?","Penta-coordinated silicon",["Hexacoordinated carbon","Tetra-coordinated nitrogen","Ionic silicon"]],
+  ["Where is simethicone commonly found?","Antacids and infant colic suspensions",["Anabolic steroid injections","Antipsychotic tablets","Muscle relaxant injections"]],
+  ["Tetrachlorides of silicon and germanium are important precursors for:","Synthesizing ultrapure silicon and germanium",["Manufacturing bronze alloys","Producing battery acid","Making rodenticides"]],
+],
+  medium: [
+  ["Why do Group 14 elements tend to form covalent rather than ionic compounds?","Because they have four valence electrons, favoring electron sharing over complete transfer",["Because they are all metals","Because they have only 1 valence electron","Because they lack any valence electrons"]],
+  ["How does metallic character change down Group 14?","It increases with increasing mass and atomic radius",["It decreases steadily down the group","It stays exactly constant","It increases only for silicon"]],
+  ["Why are silicon and germanium classified as metalloids rather than nonmetals or metals?","Their properties are intermediate, between carbon's covalent behavior and tin/lead's metallic behavior",["Because they have no valence electrons","Because they never form covalent bonds","Because they are radioactive"]],
+  ["Why is SiO2's structure so much more complex than CO2's?","Silicon forms an extended 3-D network of SiO4 units bridged by oxygen instead of discrete double bonds",["Silicon dioxide is actually a simple diatomic gas","Because oxygen cannot bond to silicon","Because SiO2 has no oxygen bridges"]],
+  ["Why is SiH4 more hazardous to handle than GeH4?","SiH4 spontaneously ignites in air, while GeH4 is stable",["GeH4 is explosive while SiH4 is inert","Both are equally unstable","SiH4 is denser than air, GeH4 is not"]],
+  ["Why are tetrachlorides of silicon and germanium industrially important?","They are key precursors for producing ultrapure silicon and germanium",["They are used only as solvents","They are inert byproducts with no use","They are used solely as rodenticides"]],
+  ["Why does silicon rarely form Si=Si double bonds the way carbon forms C=C bonds?","Because coordination number 4 (sp3) is strongly favored for silicon, disfavoring multiple bonds",["Because silicon has too few valence electrons","Because silicon is too electronegative","Because silicon cannot bond to itself at all"]],
+  ["Why can silicon reach coordination numbers of 5 or 6 while carbon is limited to 4?","Because silicon's 3d orbitals are accessible for additional bonding interactions",["Because silicon has more valence electrons than carbon","Because silicon is smaller than carbon","Because carbon has accessible 3d orbitals too"]],
+  ["What is the structural consequence of silicon's larger covalent radius compared to carbon?","Longer Si–Si bonds, giving greater structural flexibility and different steric configurations",["Shorter, more rigid bonds","No change in bond length","Formation of ionic bonds only"]],
+  ["How can the different steric configuration of silicon compounds affect drugs?","It changes protein interactions, altering pharmacodynamics and pharmacological profile",["It has no effect on protein binding","It only affects color and solubility","It always improves drug safety"]],
+  ["How does the electronegativity difference between silicon and carbon affect bond polarization?","Silicon, being more electropositive, produces different bond polarization than analogous carbon-element bonds",["It has no effect on polarization","Silicon bonds become perfectly nonpolar","Carbon becomes more electropositive than silicon"]],
+  ["Why might switching a carbon moiety for silicon alter a drug's potency?","Different bond polarization changes reactivity and bond strength, especially where H-bonding is part of the mode of action",["Because silicon always increases toxicity","Because silicon removes all biological activity","Because potency never changes with such switches"]],
+  ["Why are silicon-based compounds generally more lipophilic than their carbon analogues?","Because of their different (larger) covalent radii",["Because silicon is more electronegative","Because silicon compounds are always ionic","Because silicon has fewer valence electrons"]],
+  ["Why is the increased lipophilicity of silicon-based drugs useful for CNS-targeted therapy?","It helps drugs cross the blood–brain barrier",["It prevents any absorption into the body","It makes drugs water-soluble only","It has no relevance to the CNS"]],
+  ["Why do silicon compounds show increased half-life during hepatic metabolism vs carbon analogues?","Their enhanced lipophilicity slows hepatic breakdown",["Silicon compounds are never metabolized by the liver","They are excreted immediately unchanged","Silicon reduces lipophilicity, extending half-life"]],
+  ["What is the key difference between plain silylation and carbon silylation?","Silylation caps a heteroatom (N/O/S) H; carbon silylation places silicon next to a carbon center",["They are identical reactions","Carbon silylation only affects oxygen atoms","Silylation only occurs on carbon atoms"]],
+  ["How does carbon silylation change a novel drug's pharmacokinetics?","It enhances blood stability, increases cell penetration, and alters pharmacokinetics",["It has no pharmacokinetic effect","It always destroys biological activity","It only changes the drug's color"]],
+  ["Why is Silabolin's poor water solubility clinically relevant?","It is sparingly soluble in ethanol and insoluble in water, so it is formulated as an injectable",["It is fully water-soluble and taken orally","It dissolves instantly in water for IV use","Solubility has no bearing on its formulation"]],
+  ["Why was Silperisone's development discontinued?","Chronic toxicities were observed in animal studies",["It showed no muscle relaxant activity at all","It was too cheap to manufacture","It was found to cure the underlying condition too quickly"]],
+  ["Why were silane-functionalized indomethacin derivatives developed?","To improve lipophilicity and COX-2 selectivity for anticancer use",["To reduce indomethacin's anti-inflammatory effect only","To make indomethacin water-insoluble for topical use","To eliminate its COX inhibition entirely"]],
+  ["What did in vitro testing show about tumor uptake of silane-indomethacin derivatives?","Increased uptake of the new compounds at the tumor site",["No change in tumor uptake","Decreased uptake at the tumor site","Complete rejection by tumor cells"]],
+  ["Which functional group of indomethacin was reacted with amino-functionalized silanes?","The carboxyl group",["The methoxy group","The chlorophenyl group","The indole nitrogen"]],
+  ["What is a 'silicon isostere' drug, and why is it made?","A compound with carbon replaced by silicon, made to exploit altered bond length and lipophilicity for changed biological activity",["A drug with all carbons removed and no replacement","A purely inorganic silicon salt with no biological activity","A carbon-only compound with silicon-like properties"]],
+  ["Why was sila-haloperidol synthesized specifically at the quaternary R3COH carbon?","That is the carbon center in haloperidol's structure suited for sila-substitution",["Because it is the only carbon atom in haloperidol","Because that position contains a double bond","Because silicon cannot bond to any other position"]],
+  ["What did biological studies reveal comparing sila-haloperidol and haloperidol?","Large differences in their metabolic pathways",["Identical metabolic pathways","No detectable biological differences","Sila-haloperidol had no biological activity"]],
+  ["Why is sila-haloperidol's greater potency at the hD2 receptor clinically promising?","It offers hope for improved side effects related to metabolism",["It guarantees zero side effects","It eliminates the need for any dosing","It proves silicon drugs are always safer"]],
+  ["Why does blocking dopamine D2 receptors (as haloperidol does) also cause extrapyramidal symptoms?","Because D2 receptors are also part of the motor (extrapyramidal) neural pathway",["Because D2 receptors are only found in the liver","Because extrapyramidal symptoms are unrelated to dopamine","Because haloperidol blocks serotonin, not dopamine"]],
+  ["What clinical advantage does venlafaxine have over tricyclic antidepressants?","It lacks antimuscarinic and sedative side effects",["It has no side effects whatsoever","It causes more sedation than TCAs","It is not effective as an antidepressant"]],
+  ["What is a disadvantage of venlafaxine compared to TCAs?","Higher risk of withdrawal symptoms",["Much higher sedation risk","Much higher antimuscarinic risk","No antidepressant effect at all"]],
+  ["Why does the carbon-to-silicon switch matter stereochemically in sila-venlafaxine?","It changes the pharmacological profile of reuptake inhibition depending on the stereoisomer",["Stereochemistry has no effect in this case","It eliminates all reuptake inhibition regardless of isomer","Only the racemic mixture is ever active"]],
+  ["Which stereoisomer of sila-venlafaxine is consistent with selective noradrenaline reuptake inhibition?","(R)-sila-venlafaxine",["(S)-sila-venlafaxine","The racemic mixture only","Neither stereoisomer shows selectivity"]],
+  ["Why do some organosilicon drugs have no carbon analogue at all?","They exploit silicon's unique ability to form penta- and hexacoordinated centers",["Because carbon is too reactive to form drugs","Because they contain no biologically active atoms","Because they are entirely metallic in nature"]],
+  ["Why can silatrane toxicity vary so widely between compounds?","Toxicity depends entirely on the organic (R) group at the silicon center",["All silatranes have identical, fixed toxicity","Toxicity depends only on molecular weight","Silatranes are never toxic regardless of R group"]],
+  ["Why are aryl/2-thienyl-substituted silatranes considered safer as rodenticides?","They self-detoxify, giving low dermal toxicity and secondary poisoning risk",["They are completely non-toxic to rodents","They accumulate permanently in tissue","They cause immediate widespread environmental contamination"]],
+  ["What biological applications are alkyl/alkenyl silatranes being studied for?","Stimulation of collagen biosynthesis and as anticancer agents",["Only as industrial solvents","Only as flame retardants","Only as food preservatives"]],
+  ["Why are silicones the most widely used class of silicon-based compounds clinically?","They are versatile materials found in plastics, lubricants, catheters, and implants",["They are the only silicon compounds that are safe","They are the cheapest silicon compounds to make","They have no industrial applications outside medicine"]],
+  ["How does simethicone solve the problem of bloating?","It decreases the surface tension of gas bubbles in the stomach and intestines",["It neutralizes stomach acid directly","It increases gas bubble surface tension","It blocks gas production entirely"]],
+  ["Why can excessive gas bubbles in the stomach/intestines be clinically problematic beyond discomfort?","They can hinder ultrasound examinations",["They always cause permanent organ damage","They have no clinical relevance at all","They improve the accuracy of ultrasound imaging"]],
+  ["What five properties are compared between carbon and silicon centers in drug design?","Valency, coordination number, bond length, electronegativity, and lipophilicity",["Color, taste, odor, density, and melting point","Radioactivity, magnetism, conductivity, hardness, and pH","Only molecular weight and boiling point"]],
+  ["Why do carbon and silicon show both similarities and differences despite both having 4 valence electrons?","Although valency is analogous, they differ in coordination number, bond length, electronegativity, and lipophilicity",["Because they actually have different numbers of valence electrons","Because they are not in the same periodic group","Because silicon has no valence electrons at all"]],
+  ["How does the C/Si electron-configuration analogy justify silicon substitution in drug design?","Both have an outer ns²np² configuration, giving comparable valency and covalent bonding behavior",["Because carbon has no valence shell","Because silicon has a completely filled valence shell","Because they are isotopes of each other"]],
+  ["Why does silicon's preference for sp3 geometry limit its use in mimicking carbon's multiple-bond chemistry?","Coordination number 4 disfavors formation of double and triple bonds compared to carbon",["Silicon actually prefers multiple bonds over single bonds","sp3 geometry has no relation to bond order","Silicon cannot form any covalent bonds"]],
+  ["What overall theme connects Silabolin, Silperisone, sila-haloperidol, and sila-venlafaxine?","They introduce silicon into or beside a drug's carbon skeleton to modify pharmacological properties",["They are all purely inorganic salts with no drug activity","They are all identical molecules with different names","They share no chemical relationship at all"]],
+  ["Why is silicon dioxide's structure described as far more complex than carbon dioxide's?","It forms an extended 3-D network of SiO4 tetrahedra instead of discrete CO2-like molecules",["SiO2 is actually a simple gas like CO2","SiO2 contains no oxygen atoms","SiO2 and CO2 have identical structures"]],
+  ["How does the accessibility of silicon's 3d orbitals influence both inorganic and organosilicon chemistry?","It allows silicon to expand its coordination number, enabling compounds like silatranes",["It prevents silicon from bonding to oxygen","It makes silicon radioactive","It has no effect on silicon's bonding at all"]],
+  ["Why choose sila-substitution at a hydroxyl-bearing quaternary carbon specifically?","It preserves the analogous valency/geometry while changing electronic and steric properties",["Because that position has no bonds at all","Because it is the only carbon atom that can bond to hydrogen","Because quaternary carbons are always aromatic"]],
+  ["Why does hydride stability differ across silane, germane, and stannane?","Stability/reactivity of Group 14 hydrides shifts down the group, with silanes being least stable",["All Group 14 hydrides have identical stability","Stannane is the least stable of the three","Hydride stability is unrelated to periodic position"]],
+  ["Why do heavier Group 14 elements also form MX2 halides while carbon and silicon do not?","The +2 oxidation state becomes increasingly stable further down the group",["Because carbon and silicon cannot bond to halogens at all","Because MX2 is the only halide type that exists","Because +2 is unstable for germanium, tin, and lead"]],
+  ["Why is silicon tetrachloride's instant hydrolysis in water practically significant?","It must be handled under anhydrous/controlled conditions since it reacts immediately with moisture",["It has no practical significance","It means SiCl4 is completely unreactive with water","It only reacts with water after months of exposure"]],
+  ["What underlying atomic property explains most of silicon's distinct organosilicon drug behavior?","Silicon's larger covalent radius and accessible 3d orbitals compared to carbon",["Silicon's smaller atomic radius than carbon","Silicon's complete lack of valence electrons","Silicon's identical electronegativity to carbon"]],
+],
+  hard: [
+  ["Why doesn't replacing a drug's carbon center with silicon simply create an isosteric (interchangeable) analogue?","Because despite equal valency, Si and C differ in coordination number, bond length, electronegativity, and lipophilicity, altering sterics, polarization, and pharmacokinetics",["Because silicon has a completely different number of valence electrons","Because silicon cannot form any covalent bonds with carbon frameworks","Because carbon and silicon are in different periodic groups"]],
+  ["How does the Si vs C electronegativity difference affect a Si–O bond compared to a C–O bond?","The Si–O bond is more polarized, since silicon (1.90) is less electronegative than carbon (2.55)",["The Si–O bond is less polar than the C–O bond","Both bonds have identical polarity","Electronegativity differences make the Si–O bond purely covalent with no polarity"]],
+  ["Why is direct silicon substitution at a C=C or C=O pharmacophore generally avoided in sila-drug design?","Silicon strongly disfavors double bonds, so sila-substitution is applied at saturated (often quaternary) carbon centers instead",["Silicon forms even stronger double bonds than carbon","Double bonds have no relevance to sila-substitution","Silicon can only substitute at aromatic carbons"]],
+  ["What chain of reasoning links silane functionalization of indomethacin's carboxyl group to its 15-fold antiproliferative effect against pancreatic cancer?","Silane functionalization raises lipophilicity and COX-2 selectivity, improving tumor uptake, which boosts the antiproliferative effect",["Silane functionalization abolished COX-2 selectivity, which increased toxicity randomly","It reduced lipophilicity, decreasing cellular uptake but increasing potency","The carboxyl group was removed entirely, unrelated to the antiproliferative result"]],
+  ["Why does silicon's increased lipophilicity produce both improved blood–brain barrier penetration and increased half-life/toxicity risk?","Greater lipophilicity increases membrane diffusion for CNS penetration but also slows hepatic clearance, raising accumulation risk",["Lipophilicity only affects blood-brain barrier crossing, never metabolism","Increased lipophilicity always decreases half-life","These two effects are unrelated to lipophilicity"]],
+  ["What does sila-haloperidol's greater hD2 potency plus differing metabolic pathway suggest about haloperidol's extrapyramidal side effects?","The side effects may be more linked to haloperidol's carbon-based metabolic pathway/metabolites than to D2 blockade itself",["It proves D2 blockade itself always causes extrapyramidal symptoms regardless of metabolism","It shows sila-haloperidol has no D2 activity at all","It proves metabolism has no role in extrapyramidal symptoms"]],
+  ["What does (R)-sila-venlafaxine's selective noradrenaline reuptake inhibition reveal about the C→Si switch at a stereocenter?","Silicon's longer bonds/different geometry change substituent spatial arrangement, altering enantiomer-specific target fit",["Stereochemistry is irrelevant once silicon replaces carbon","Both enantiomers behave identically after silicon substitution","The switch eliminates all reuptake inhibition activity"]],
+  ["Why are silatranes considered structurally unique with 'no carbon analogue'?","They rely on a penta-coordinated silicon center (via a dative N→Si bond) enabled by accessible 3d orbitals, which carbon cannot form",["Because carbon cannot bond to nitrogen under any circumstances","Because silatranes contain no silicon atoms","Because carbon readily forms identical penta-coordinated structures"]],
+  ["What medicinal chemistry principle do the aryl/2-thienyl vs alkyl/alkenyl silatrane R-group findings illustrate?","Peripheral substituents can tune the same core scaffold from toxic (rodenticide) to therapeutic — a structure-activity relationship principle",["All silatranes have identical biological activity regardless of R group","The core silatrane cage has no influence on activity, only the R group matters","R-group changes never affect toxicity in silicon compounds"]],
+  ["Why does SiCl4 hydrolyze instantly in water while CCl4 resists hydrolysis?","Silicon can form a pentacoordinate transition state via accessible d-orbitals, enabling fast substitution; carbon cannot",["CCl4 is actually more reactive with water than SiCl4","Both compounds hydrolyze at identical rates","Silicon cannot interact with water molecules at all"]],
+  ["What is the fundamental structural difference between 'silicon isosteres' and 'carbon silylation' strategies?","Isosteres replace a carbon atom within the pharmacophore with silicon; carbon silylation appends a silyl group next to an existing carbon",["They are the same strategy with different names","Carbon silylation removes the entire carbon skeleton","Silicon isosteres always add extra atoms rather than substituting"]],
+  ["Why might a chemist prefer heteroatom silylation over full sila-substitution when first modifying a lead compound?","Silylation is simpler, modifying a labile N/O/S–H bond without altering the core carbon skeleton, for quick property screening",["Silylation always destroys the core pharmacophore completely","Sila-substitution is simpler and always tried first","Silylation and sila-substitution both require rebuilding the whole molecule"]],
+  ["Why might a silylated (trimethylsilyl) anabolic steroid like Silabolin pose a heart/liver toxicity risk despite lower androgenic activity?","Enhanced lipophilicity from the silyl group can extend half-life and tissue accumulation in lipid-rich organs like liver and heart",["The silyl group has no effect on lipophilicity or accumulation","Lower androgenic activity always guarantees zero organ toxicity","Trimethylsilyl groups make the steroid completely water-soluble, preventing accumulation"]],
+  ["What does Silperisone's discontinuation despite rational design teach about assuming sila-substitution is inherently safe?","Sila-substitution can introduce unpredictable toxic metabolic pathways even when structurally analogous, requiring independent safety testing",["It proves all sila-substituted drugs are automatically toxic","It shows structural analogy always guarantees identical safety","It shows silicon substitution never changes a drug's toxicity"]],
+  ["Why isn't it contradictory that silicon drugs show delayed hepatic clearance while SiCl4 hydrolyzes instantly?","Reactivity depends on which substituents are bonded to silicon — a shielded Si–C drug framework resists breakdown, unlike a reactive Si–Cl bond",["Both observations describe the exact same chemical process","Silicon is always unreactive, making both findings impossible","Silicon tetrachloride and organosilicon drugs behave identically in water"]],
+  ["How do valency, coordination number, bond length, electronegativity, and lipophilicity jointly determine a sila-analogue's biological activity?","Together they govern bonding pattern, geometry/multiple-bond capacity, steric fit, bond polarization/H-bonding, and pharmacokinetics",["Only lipophilicity matters; the other four properties are irrelevant","These five properties always act completely independently of one another","None of these properties affect biological activity, only molecular weight does"]],
+  ["Why is it significant that (R)-sila-venlafaxine (not the general racemate) aligns with selective noradrenaline reuptake inhibition, given venlafaxine is a dual SNRI?","It shows sila-substitution plus stereochemistry can narrow a drug's dual target profile toward a single, more selective target",["It proves stereochemistry never matters for reuptake inhibitors","It shows sila-substitution eliminates all reuptake activity entirely","It proves venlafaxine and sila-venlafaxine have identical selectivity"]],
+  ["Why can silicon's preference for CN4/sp3 coexist with its ability to form penta-/hexacoordinated silatranes?","Silicon's larger size and accessible d-orbitals allow extra ligands (e.g., dative N→Si bonds) to expand coordination beyond its favored sp3 ground state",["Silicon can never exceed coordination number 4 under any circumstances","Silatranes actually have a carbon, not silicon, at their center","Expanding coordination number requires silicon to lose all its valence electrons"]],
+  ["What general periodic trend explains both increasing hydride instability up the group and increasing MX2 stability down the group?","Both reflect increasing metallic character and stability of lower oxidation states/weaker bonds moving down Group 14 (inert pair effect)",["Both trends are unrelated coincidences with no periodic basis","Hydride stability and halide oxidation-state trends move in opposite directions for unrelated reasons","Both trends reflect decreasing atomic radius down the group"]],
+  ["Why can't silicon form a discrete O=Si=O molecule analogous to gaseous CO2?","Silicon's larger 3p orbitals overlap poorly with oxygen's 2p orbitals for π-bonding, so it forms an extended network of single Si–O bonds instead",["Silicon cannot bond to oxygen at all","Silicon actually does form a stable gaseous O=Si=O molecule","Oxygen refuses to bond with any Group 14 element except carbon"]],
+  ["Why is replacing a labile C=C double bond in a drug with a silicon isostere chemically unsound, based on the lecture's principles?","Silicon strongly disfavors double bond formation (favoring CN4/sp3), so it cannot directly substitute at an unsaturated position",["Silicon forms even more stable double bonds than carbon, making it ideal here","Double bonds have no bearing on whether silicon substitution works","This substitution is standard practice and always succeeds"]],
+  ["Why does the lecture describe silicon as a Group 14 element with 'similarities and differences' rather than a direct carbon substitute?","Because silicon substitution changes multiple physicochemical parameters simultaneously, some beneficial and some detrimental, making it a deliberate design tool",["Because silicon and carbon are chemically identical in every respect","Because silicon can never be used in drug design","Because differences between Si and C are purely theoretical with no practical impact"]],
+  ["What shared silicon property likely drives both the improved COX-2 selectivity of indomethacin-silane derivatives and the improved D2 potency of sila-haloperidol?","Altered steric/electronic profile from silicon's longer bonds, different electronegativity, and greater lipophilicity changes target-binding fit",["Both results are due to pure coincidence with no shared cause","Both are caused solely by a change in molecular color","Both results stem from silicon's radioactivity"]],
+  ["Why is a drug metabolized via an N–H, O–H, or S–H bond a good candidate for silylation as a stability-enhancing strategy?","Silylation caps the reactive bond with a bulkier, more lipophilic group, protecting it from premature degradation and improving permeability",["Silylation always accelerates degradation of such bonds","N–H, O–H, and S–H bonds cannot be silylated under any conditions","Silylation removes the heteroatom entirely, eliminating drug activity"]],
+  ["What does the rarity yet industrial value of germanium and tin suggest about the link between elemental abundance and pharmaceutical relevance?","Importance is determined by unique chemical/physical properties, not natural abundance",["Only the most abundant elements can ever be pharmaceutically useful","Rare elements are always too dangerous for any industrial use","Abundance and pharmaceutical value are always directly proportional"]],
+  ["Why is lead predominantly used in Pb2+/Pb4+ battery chemistry rather than tetravalent organolead drug compounds?","The inert pair effect makes lead's valence electron pair reluctant to bond, stabilizing +2 over +4 for the heaviest Group 14 element",["Lead has no valence electrons available for any oxidation state","+4 is actually the only stable oxidation state for lead","Lead cannot form any ionic compounds at all"]],
+  ["Why are silylation (H on N/O/S) and carbon silylation (Si next to a carbon center) treated as mechanistically distinct strategies?","Silylation modifies a labile heteroatom bond's reactivity/stability, while carbon silylation alters the carbon skeleton itself and overall lipophilicity/pharmacokinetics",["They both modify the exact same type of bond in the molecule","Carbon silylation only ever occurs on nitrogen atoms","There is no mechanistic distinction; the terms are interchangeable"]],
+  ["Why is simethicone's mechanism (lowering gas-bubble surface tension) pharmacologically distinct from an antacid's acid-neutralizing action?","Simethicone acts physically (coalescing bubbles) rather than chemically (neutralizing acid), a mechanically distinct mode of action",["Simethicone neutralizes stomach acid exactly like a standard antacid","Simethicone and antacids share an identical chemical mechanism","Simethicone works by blocking dopamine receptors in the gut"]],
+  ["Based on the silane→germane→stannane stability trend, would a hypothetical plumbane (PbH4) be predicted to be more or less stable than stannane?","Less stable, since lead strongly favors the +2 state over +4, consistent with the trend of increasing instability of +4 hydrides down the group",["More stable, since heavier hydrides always become sturdier","Exactly as stable as stannane, with no difference expected","Plumbane would be more stable than even germane"]],
+  ["Why is coordination number treated as a separate property from valency when comparing carbon and silicon?","Coordination number can exceed formal valency for silicon (up to 6, via dative/d-orbital interactions), a capability carbon structurally lacks",["Coordination number and valency are always exactly the same value for every element","Carbon's coordination number always exceeds silicon's","Valency has no relationship to bonding capacity at all"]],
+  ["Why would Si–O or Si–N bonds in a silicon-based prodrug be expected to cleave more readily in vivo than analogous C–O or C–N bonds?","Silicon's larger, more polarizable center and accessible d-orbitals make Si-heteroatom bonds more susceptible to nucleophilic attack",["Si–O and Si–N bonds are actually far stronger and more resistant to hydrolysis than C–O/C–N bonds","Silicon-heteroatom bonds never hydrolyze under physiological conditions","There is no difference in lability between Si- and C-heteroatom bonds"]],
+  ["What does the contrast between sila-haloperidol (increased potency) and sila-venlafaxine (altered selectivity) teach about assuming sila-substitution always improves a drug the same way?","Sila-substitution effects are case-specific, so each analogue must be evaluated individually rather than assuming a universal benefit",["Sila-substitution always increases potency in every case","Sila-substitution always shifts target selectivity and never changes potency","These two examples prove sila-substitution has no reliable effect on any drug property"]],
+  ["How does the 'MX4 general/MX2 in heavier elements' halide pattern relate to the '+4 dominant, +2 more stable down the group' oxidation-state trend?","They describe the same trend — +4/MX4 dominates overall, but +2/MX2 becomes increasingly accessible in the heavier elements",["These are two completely unrelated, contradictory trends","MX2 halides are actually more common than MX4 for every Group 14 element","The halide pattern applies only to carbon and silicon, not the heavier elements"]],
+  ["Why does the lecture single out indomethacin's carboxyl group (not another functional group) for attaching amino-functionalized silanes?","The carboxyl group offers a reactive site for amide coupling with amine-terminated silanes without disrupting the core pharmacophore",["Because the carboxyl group is biologically inert and irrelevant to activity","Because indomethacin has no other functional groups available","Because silanes can only ever react with carboxyl groups in any molecule"]],
+  ["What trade-off must a drug designer weigh when using silicon substitution to improve CNS drug delivery (e.g., sila-haloperidol)?","Improved CNS penetration and potency must be weighed against slower hepatic clearance and greater accumulation-related toxicity risk",["There is no trade-off; silicon substitution only ever improves safety","CNS penetration and hepatic clearance are completely unrelated to lipophilicity","Silicon substitution always eliminates the need to consider toxicity"]],
+  ["Why do Si–C bonds remain stable and useful for drug scaffolds despite silicon being more electropositive than carbon?","Reactivity in silicon compounds depends mainly on the specific substituents attached (e.g., Si–Cl, Si–O), not electropositivity alone; Si–C bonds are robust",["Electropositivity makes all silicon bonds equally unstable, including Si–C","Si–C bonds are actually weaker than any C–C bond under all conditions","Silicon's electropositivity has no bearing on any of its bond properties"]],
+  ["How do silatranes and silicones each achieve structural uniqueness with 'no carbon analogue'?","Silatranes form a discrete penta-coordinated Si center via a dative N→Si bond; silicones form extended Si–O–Si polymer backbones",["Both classes are actually carbon-based polymers with no silicon involved","Silatranes and silicones are chemically identical structures","Neither class has any unique structural feature versus carbon compounds"]],
+  ["Why is silicon substitution more likely to succeed pharmacologically at a quaternary (sp3) carbon than at an aromatic (sp2) carbon?","Silicon favors sp3/CN4 geometry matching a quaternary carbon; aromatic/sp2 positions require multiply-bonded, conjugated systems that silicon disfavors",["Silicon substitutes equally well at both aromatic and quaternary carbons","Silicon strongly prefers aromatic/conjugated systems over sp3 centers","Quaternary carbons cannot undergo any type of chemical substitution"]],
+  ["Why do coordination number, bond length, and electronegativity differences act jointly (not independently) to change a drug's pharmacodynamics?","Target binding depends simultaneously on overall shape, electronic distribution, and binding energetics, so these properties combine to determine drug-target fit",["Each property acts in total isolation with no interaction between them","Only electronegativity affects pharmacodynamics; the others are irrelevant","Pharmacodynamics depends solely on molecular weight, not these properties"]],
+  ["Why does the lecture present Group 14's general inorganic chemistry before its pharmaceutical silicon chemistry section?","The fundamental periodic/bonding trends provide the mechanistic foundation needed to rationally predict how silicon substitution alters a drug's properties",["The order is arbitrary and carries no pedagogical purpose","Pharmaceutical chemistry has no connection to basic inorganic trends","Inorganic chemistry facts become irrelevant once drug examples are introduced"]],
+]
+};
+let quizLevel = 'easy';
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+const quizList = document.getElementById('quizList');
+function renderQuiz(){
+  const bank = quizByLevel[quizLevel];
+  quizList.innerHTML = '';
+  bank.forEach((item,qi)=>{
+    const [q, correct, wrongs] = item;
+    const opts = shuffle([correct, ...wrongs]);
+    const box = document.createElement('div');
+    box.className = 'q-item';
+    box.dataset.correct = correct;
+    box.innerHTML = `
+      <span class="q-num">QUESTION ${qi+1} / ${bank.length}</span>
+      <div class="q-text">${q}</div>
+      <div class="q-opts">
+        ${opts.map((o,oi)=>`
+          <label class="q-opt">
+            <input type="radio" name="q${qi}" value="${o.replace(/"/g,'&quot;')}">
+            <span>${o}</span>
+          </label>`).join('')}
+      </div>
+    `;
+    quizList.appendChild(box);
+  });
+  document.getElementById('quizScore').textContent = 'Score: —';
+  document.getElementById('quizScore').classList.remove('good');
+}
+renderQuiz();
+
+document.getElementById('quizReshuffle').addEventListener('click', renderQuiz);
+
+document.getElementById('quizLevelToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button[data-level]');
+  if(!btn) return;
+  quizLevel = btn.dataset.level;
+  document.querySelectorAll('#quizLevelToggle button').forEach(b=>b.classList.toggle('sel', b===btn));
+  renderQuiz();
+});
+
+document.getElementById('quizCheck').addEventListener('click', ()=>{
+  let score = 0;
+  const bank = quizByLevel[quizLevel];
+  document.querySelectorAll('.q-item').forEach(box=>{
+    const correct = box.dataset.correct;
+    const opts = box.querySelectorAll('.q-opt');
+    const checked = box.querySelector('input:checked');
+    opts.forEach(o=>o.classList.remove('correct','wrong'));
+    opts.forEach(o=>{
+      const val = o.querySelector('input').value;
+      if(val === correct) o.classList.add('correct');
+    });
+    if(checked){
+      if(checked.value === correct){ score++; }
+      else { checked.closest('.q-opt').classList.add('wrong'); }
+    }
+  });
+  const scoreEl = document.getElementById('quizScore');
+  scoreEl.textContent = `Score: ${score} / ${bank.length}`;
+  scoreEl.classList.toggle('good', score === bank.length);
+});
+
+</script>
+</body>
+</html>
